@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodCourt — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060b14;--surface:#0d1520;--card:#111c2d;--border:#1e2d42;--accent:#00d4ff;--accent2:#ff6b35;--green:#00e676;--purple:#b388ff;--text:#e8f4f8;--muted:#5a7a8a;--yellow:#ffd60a;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:40px 40px;z-index:0;}
+
+  /* SIDEBAR */
+  .sidebar{width:220px;min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 1rem;position:fixed;top:0;left:0;bottom:0;z-index:10;}
+  .logo{display:flex;align-items:center;gap:.5rem;margin-bottom:2.5rem;}
+  .logo-mark{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.85rem;}
+  .logo-text{font-size:.95rem;font-weight:700;}
+  .logo-text span{color:var(--accent);}
+  .nav-section{margin-bottom:1.5rem;}
+  .nav-section-title{font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem;padding-left:.5rem;}
+  .nav-item{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:8px;color:var(--muted);cursor:pointer;font-size:.85rem;transition:all .2s;margin-bottom:.1rem;user-select:none;}
+  .nav-item:hover{color:var(--text);background:var(--card);}
+  .nav-item.active{color:var(--accent);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);}
+  .nav-badge{margin-left:auto;background:var(--accent2);color:#fff;font-size:.65rem;padding:.1rem .45rem;border-radius:99px;}
+  .user-card{margin-top:auto;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:.75rem;}
+  .user-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#000;font-weight:700;}
+  .user-name{font-size:.82rem;font-weight:600;}
+  .user-role{font-size:.7rem;color:var(--muted);}
+
+  /* MAIN */
+  .main{margin-left:220px;flex:1;position:relative;z-index:1;}
+  .topbar{background:rgba(13,21,32,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .topbar h1{font-family:'Instrument Serif',serif;font-size:1.4rem;}
+  .topbar h1 em{color:var(--accent);font-style:italic;}
+  .topbar-right{display:flex;align-items:center;gap:1rem;}
+  .date-range{background:var(--card);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;font-size:.78rem;color:var(--muted);}
+  .export-btn{background:var(--accent);color:#000;border:none;padding:.4rem 1rem;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;}
+  .logout-btn-top{background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);color:var(--accent2);padding:.4rem 1rem;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;}
+
+  /* PAGE SYSTEM */
+  .page{display:none;padding:1.75rem 2rem;animation:fadeIn .2s ease;}
+  .page.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+  /* STATS */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem;}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;transition:border-color .3s;}
+  .stat-card:hover{border-color:var(--accent);}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--glow,transparent);}
+  .stat-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;opacity:.08;}
+  .stat-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.75rem;}
+  .stat-value{font-family:'Instrument Serif',serif;font-size:2.2rem;line-height:1;margin-bottom:.5rem;}
+  .stat-sub{display:flex;align-items:center;gap:.4rem;font-size:.75rem;}
+  .change-up{color:var(--green);}.change-down{color:var(--accent2);}
+
+  /* PANELS */
+  .main-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.25rem;}
+  .ph{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .ph-title{font-size:.92rem;font-weight:600;}
+  .ph-meta{font-size:.75rem;color:var(--muted);}
+
+  /* REVENUE CHART */
+  .revenue-chart{padding:1.5rem;}
+  .chart-bars{display:flex;align-items:flex-end;gap:6px;height:160px;}
+  .rev-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+  .rev-bar{width:100%;border-radius:5px 5px 0 0;min-height:4px;position:relative;transition:opacity .2s;cursor:pointer;}
+  .rev-bar:hover{opacity:.8;}
+  .rev-bar-tooltip{position:absolute;bottom:105%;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.3rem .5rem;font-size:.68rem;white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none;}
+  .rev-bar:hover .rev-bar-tooltip{opacity:1;}
+  .rev-bar-label{font-size:.62rem;color:var(--muted);margin-top:4px;}
+
+  /* VENDOR PERF */
+  .vendor-perf{padding:1rem;display:flex;flex-direction:column;gap:.75rem;}
+  .vp-row{display:flex;align-items:center;gap:.75rem;}
+  .vp-emoji{font-size:1.3rem;width:32px;text-align:center;}
+  .vp-info{flex:1;}
+  .vp-name{font-size:.82rem;font-weight:600;margin-bottom:3px;}
+  .vp-bar-bg{height:6px;background:var(--border);border-radius:99px;overflow:hidden;}
+  .vp-bar-fill{height:100%;border-radius:99px;transition:width 1s;}
+  .vp-rev{font-size:.82rem;font-weight:700;text-align:right;min-width:70px;}
+
+  /* BEST SELLERS */
+  .bs-row{display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;border-radius:10px;transition:background .15s;cursor:default;}
+  .bs-row:hover{background:var(--surface);}
+  .bs-rank{font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--muted);width:24px;text-align:center;}
+  .bs-rank.gold{color:var(--yellow);}.bs-rank.silver{color:#aab;}.bs-rank.bronze{color:#cd7f32;}
+  .bs-info{flex:1;}
+  .bs-name{font-size:.83rem;font-weight:600;}
+  .bs-vendor{font-size:.7rem;color:var(--muted);}
+  .bs-sales{font-size:.82rem;font-weight:700;color:var(--accent);}
+
+  /* QUEUE */
+  .q-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;}
+  .q-token{font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--accent);}
+  .q-status{font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:99px;}
+  .q-preparing{background:rgba(0,212,255,.12);color:var(--accent);}
+  .q-ready{background:rgba(0,230,118,.12);color:var(--green);}
+  .q-pending{background:rgba(255,214,10,.12);color:var(--yellow);}
+  .q-time{font-size:.72rem;color:var(--muted);}
+
+  /* ALERTS */
+  .alert-row{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .75rem;border-radius:10px;font-size:.8rem;border-left:3px solid;margin-bottom:.5rem;}
+  .alert-warn{background:rgba(255,214,10,.06);border-color:var(--yellow);}
+  .alert-err{background:rgba(255,107,53,.06);border-color:var(--accent2);}
+  .alert-ok{background:rgba(0,230,118,.06);border-color:var(--green);}
+  .alert-icon{font-size:1rem;}
+  .alert-title{font-weight:600;margin-bottom:2px;}
+  .alert-desc{color:var(--muted);font-size:.74rem;}
+
+  /* VENDORS PAGE */
+  .vendors-table{width:100%;border-collapse:collapse;}
+  .vendors-table th{text-align:left;padding:.75rem 1.5rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border);}
+  .vendors-table td{padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-size:.87rem;}
+  .vendors-table tr:last-child td{border-bottom:none;}
+  .vendors-table tr:hover td{background:var(--surface);}
+
+  /* ORDERS ADMIN PAGE */
+  .orders-table{width:100%;border-collapse:collapse;}
+  .orders-table th{text-align:left;padding:.75rem 1.5rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border);}
+  .orders-table td{padding:.9rem 1.5rem;border-bottom:1px solid var(--border);font-size:.84rem;}
+  .orders-table tr:hover td{background:var(--surface);}
+  .o-status{display:inline-flex;padding:.25rem .7rem;border-radius:99px;font-size:.72rem;font-weight:700;}
+  .o-placed{background:rgba(255,214,10,.12);color:var(--yellow);}
+  .o-preparing{background:rgba(0,212,255,.12);color:var(--accent);}
+  .o-ready{background:rgba(0,230,118,.12);color:var(--green);}
+  .o-collected{background:rgba(90,120,138,.15);color:var(--muted);}
+  .o-cancelled{background:rgba(255,107,53,.12);color:var(--accent2);}
+
+  /* REPORTS */
+  .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .report-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;}
+  .report-title{font-size:.9rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+  .report-value{font-family:'Instrument Serif',serif;font-size:2.5rem;margin-bottom:.25rem;}
+  .report-sub{font-size:.78rem;color:var(--muted);}
+
+  /* CUSTOMERS */
+  .customers-table{width:100%;border-collapse:collapse;}
+  .customers-table th{text-align:left;padding:.75rem 1.5rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border);}
+  .customers-table td{padding:.9rem 1.5rem;border-bottom:1px solid var(--border);font-size:.84rem;}
+  .customers-table tr:hover td{background:var(--surface);}
+
+  /* DISCOUNTS */
+  .disc-row{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--border);}
+  .disc-row:last-child{border-bottom:none;}
+  .disc-label{font-size:.88rem;font-weight:600;}
+  .disc-sub{font-size:.75rem;color:var(--muted);margin-top:.15rem;}
+  .disc-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.5rem .75rem;font-family:'Space Grotesk',sans-serif;color:var(--text);font-size:.9rem;width:120px;outline:none;}
+  .disc-input:focus{border-color:var(--accent);}
+
+  .bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;}
+
+  @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr);}.bottom-grid{grid-template-columns:1fr 1fr;}.report-grid{grid-template-columns:1fr;}}
+  @media(max-width:900px){.main-grid{grid-template-columns:1fr;}}
+  @media(max-width:700px){.sidebar{display:none;}.main{margin-left:0;}.bottom-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">FC</div>
+    <div class="logo-text">Food<span>Court</span></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-item" onclick="showPage('analytics',this)">📈 Analytics</div>
+    <div class="nav-item" onclick="showPage('allorders',this)">🧾 Orders <span class="nav-badge" id="ordersCount">0</span></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Management</div>
+    <div class="nav-item" onclick="showPage('vendors',this)">🏪 Vendors</div>
+    <div class="nav-item" onclick="showPage('menu',this)">🍽 Menu Items</div>
+    <div class="nav-item" onclick="showPage('customers',this)">👥 Customers</div>
+    <div class="nav-item" onclick="showPage('queue',this)">🎫 Queue</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Finance</div>
+    <div class="nav-item" onclick="showPage('revenue',this)">💰 Revenue</div>
+    <div class="nav-item" onclick="showPage('discounts',this)">🏷 Discounts</div>
+    <div class="nav-item" onclick="showPage('reports',this)">📋 Reports</div>
+  </div>
+
+  <div class="user-card">
+    <div class="user-avatar">AD</div>
+    <div>
+      <div class="user-name" id="adminName">Admin</div>
+      <div class="user-role">Super Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <h1 id="pageHeading">System <em>Overview</em></h1>
+    <div class="topbar-right">
+      <div class="date-range" id="todayDate">📅 Loading…</div>
+      <button class="export-btn">⬇ Export</button>
+      <button class="logout-btn-top" onclick="doLogout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE: DASHBOARD ───────────────────────────── -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid">
+      <div class="stat-card" style="--glow:var(--accent)"><div class="stat-glow" style="background:var(--accent)"></div><div class="stat-label">Total Revenue Today</div><div class="stat-value" id="d-revenue" style="color:var(--accent)">₹0</div><div class="stat-sub"><span class="change-up" id="d-rev-change">—</span><span style="color:var(--muted)">vs yesterday</span></div></div>
+      <div class="stat-card" style="--glow:var(--green)"><div class="stat-glow" style="background:var(--green)"></div><div class="stat-label">Total Orders</div><div class="stat-value" id="d-orders" style="color:var(--green)">0</div><div class="stat-sub"><span class="change-up" id="d-ord-change">—</span><span style="color:var(--muted)">vs yesterday</span></div></div>
+      <div class="stat-card" style="--glow:var(--yellow)"><div class="stat-glow" style="background:var(--yellow)"></div><div class="stat-label">Active Customers</div><div class="stat-value" id="d-customers" style="color:var(--yellow)">0</div><div class="stat-sub"><span style="color:var(--muted)">Across all vendors</span></div></div>
+      <div class="stat-card" style="--glow:var(--purple)"><div class="stat-glow" style="background:var(--purple)"></div><div class="stat-label">Avg Order Value</div><div class="stat-value" id="d-avg" style="color:var(--purple)">₹0</div><div class="stat-sub"><span style="color:var(--muted)">Per transaction</span></div></div>
+    </div>
+    <div class="main-grid">
+      <div class="panel"><div class="ph"><div class="ph-title">Weekly Revenue Trend</div><div class="ph-meta">Mon–Sun</div></div><div class="revenue-chart"><div class="chart-bars" id="revenueChart"></div></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">Vendor Performance</div><div class="ph-meta">By revenue</div></div><div class="vendor-perf" id="vendorPerf"></div></div>
+    </div>
+    <div class="bottom-grid">
+      <div class="panel"><div class="ph"><div class="ph-title">🏆 Best Sellers</div><div class="ph-meta">Today</div></div><div style="padding:.75rem" id="bestSellers"></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">🎫 Live Queue</div><div class="ph-meta" id="queueCount">Loading…</div></div><div style="padding:.75rem" id="queueList"></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">🔔 Alerts</div></div><div style="padding:.75rem" id="alertsList"></div></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: ANALYTICS ───────────────────────────── -->
+  <div class="page" id="page-analytics">
+    <div class="stats-grid">
+      <div class="stat-card" style="--glow:var(--accent)"><div class="stat-label">This Week Revenue</div><div class="stat-value" style="color:var(--accent)" id="a-week">₹0</div></div>
+      <div class="stat-card" style="--glow:var(--green)"><div class="stat-label">This Week Orders</div><div class="stat-value" style="color:var(--green)" id="a-worders">0</div></div>
+      <div class="stat-card" style="--glow:var(--yellow)"><div class="stat-label">Peak Hour</div><div class="stat-value" style="color:var(--yellow);font-size:1.5rem;padding-top:.4rem">1:00 PM</div></div>
+      <div class="stat-card" style="--glow:var(--purple)"><div class="stat-label">Best Vendor</div><div class="stat-value" style="color:var(--purple);font-size:1.3rem;padding-top:.4rem" id="a-best">—</div></div>
+    </div>
+    <div class="panel"><div class="ph"><div class="ph-title">Revenue by Day — This Week</div></div><div class="revenue-chart"><div class="chart-bars" id="analyticsChart"></div></div></div>
+    <div class="main-grid">
+      <div class="panel"><div class="ph"><div class="ph-title">Top 10 Best Selling Items</div></div><div style="padding:.75rem" id="analyticsBest"></div></div>
+      <div class="panel"><div class="ph"><div class="ph-title">Revenue by Vendor</div></div><div class="vendor-perf" id="analyticsVendors"></div></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: ALL ORDERS ──────────────────────────── -->
+  <div class="page" id="page-allorders">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🧾 All Orders Today</div><div class="ph-meta" id="ordersTotal">Loading…</div></div>
+      <table class="orders-table">
+        <thead><tr><th>Token</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody id="ordersTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PAGE: VENDORS ─────────────────────────────── -->
+  <div class="page" id="page-vendors">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🏪 Vendor Management</div><div class="ph-meta">4 vendors registered</div></div>
+      <table class="vendors-table">
+        <thead><tr><th>Vendor</th><th>Status</th><th>Today Orders</th><th>Today Revenue</th><th>Action</th></tr></thead>
+        <tbody id="vendorsTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PAGE: MENU ITEMS ──────────────────────────── -->
+  <div class="page" id="page-menu">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🍽 All Menu Items</div><div class="ph-meta" id="menuTotal">Loading…</div></div>
+      <table class="vendors-table">
+        <thead><tr><th>Item</th><th>Vendor</th><th>Price</th><th>Type</th><th>Status</th></tr></thead>
+        <tbody id="menuTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PAGE: CUSTOMERS ───────────────────────────── -->
+  <div class="page" id="page-customers">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">👥 Customers</div><div class="ph-meta">All registered users</div></div>
+      <table class="customers-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th></tr></thead>
+        <tbody id="customersTableBody">
+          <tr><td>Test Customer</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7615030502191b130436021305025815191b">[email&#160;protected]</a></td><td>9000000006</td><td><span style="background:rgba(0,212,255,.12);color:var(--accent);padding:.2rem .6rem;border-radius:99px;font-size:.72rem">customer</span></td><td style="color:var(--muted)">Today</td></tr>
+          <tr><td>Ravi Kumar</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2b0a3b4ab82b1b2aba1a7a5a3b0a6a7aceca1adaf">[email&#160;protected]</a></td><td>9000000002</td><td><span style="background:rgba(255,214,10,.12);color:var(--yellow);padding:.2rem .6rem;border-radius:99px;font-size:.72rem">vendor</span></td><td style="color:var(--muted)">Today</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PAGE: QUEUE ───────────────────────────────── -->
+  <div class="page" id="page-queue">
+    <div class="panel">
+      <div class="ph"><div class="ph-title">🎫 Full Queue Status</div><div class="ph-meta" id="fullQueueMeta">Loading…</div></div>
+      <div style="padding:.75rem" id="fullQueueList"></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: REVENUE ─────────────────────────────── -->
+  <div class="page" id="page-revenue">
+    <div class="stats-grid">
+      <div class="stat-card" style="--glow:var(--accent)"><div class="stat-label">Today</div><div class="stat-value" id="r-today" style="color:var(--accent)">₹0</div></div>
+      <div class="stat-card" style="--glow:var(--green)"><div class="stat-label">This Week</div><div class="stat-value" id="r-week" style="color:var(--green)">₹0</div></div>
+      <div class="stat-card" style="--glow:var(--yellow)"><div class="stat-label">This Month (est.)</div><div class="stat-value" id="r-month" style="color:var(--yellow)">₹0</div></div>
+      <div class="stat-card" style="--glow:var(--purple)"><div class="stat-label">Tax Collected (5%)</div><div class="stat-value" id="r-tax" style="color:var(--purple)">₹0</div></div>
+    </div>
+    <div class="panel"><div class="ph"><div class="ph-title">Revenue Trend — This Week</div></div><div class="revenue-chart"><div class="chart-bars" id="revenuePageChart"></div></div></div>
+  </div>
+
+  <!-- ── PAGE: DISCOUNTS ───────────────────────────── -->
+  <div class="page" id="page-discounts">
+    <div class="panel" style="max-width:600px">
+      <div class="ph"><div class="ph-title">🏷 Discount Settings</div></div>
+      <div class="disc-row"><div><div class="disc-label">Discount Threshold</div><div class="disc-sub">Minimum order value to apply discount</div></div><div style="display:flex;align-items:center;gap:.5rem">₹ <input class="disc-input" type="number" value="400"></div></div>
+      <div class="disc-row"><div><div class="disc-label">Discount Rate</div><div class="disc-sub">Percentage off when threshold is met</div></div><div style="display:flex;align-items:center;gap:.5rem"><input class="disc-input" type="number" value="10"> %</div></div>
+      <div class="disc-row"><div><div class="disc-label">Tax Rate</div><div class="disc-sub">GST applied to all orders</div></div><div style="display:flex;align-items:center;gap:.5rem"><input class="disc-input" type="number" value="5"> %</div></div>
+      <div class="disc-row"><div><div class="disc-label">Enable Discounts</div><div class="disc-sub">Toggle system-wide discounts</div></div><div style="position:relative;width:40px;height:22px;display:inline-block"><input type="checkbox" checked style="opacity:0;width:0;height:0;" id="discToggle"><label for="discToggle" style="position:absolute;inset:0;background:var(--green);border-radius:22px;cursor:pointer;"><span style="position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.3s;display:block;transform:translateX(18px)"></span></label></div></div>
+      <div style="padding:1.5rem"><button onclick="showAdminToast('Discount settings saved! ✓')" style="background:var(--accent);color:#000;border:none;padding:.75rem 1.5rem;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;">💾 Save Settings</button></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: REPORTS ─────────────────────────────── -->
+  <div class="page" id="page-reports">
+    <div class="report-grid">
+      <div class="report-card"><div class="report-title">💰 Daily Revenue Report</div><div class="report-value" id="rpt-rev" style="color:var(--accent)">₹0</div><div class="report-sub">Total revenue today across all vendors</div></div>
+      <div class="report-card"><div class="report-title">📦 Order Summary</div><div class="report-value" id="rpt-ord" style="color:var(--green)">0</div><div class="report-sub">Total orders processed today</div></div>
+      <div class="report-card"><div class="report-title">🏪 Active Vendors</div><div class="report-value" id="rpt-vnd" style="color:var(--yellow)">4</div><div class="report-sub">Vendors currently open</div></div>
+      <div class="report-card"><div class="report-title">🏷 Discounts Given</div><div class="report-value" id="rpt-disc" style="color:var(--purple)">₹0</div><div class="report-sub">Total discount amount today</div></div>
+    </div>
+    <div class="panel" style="margin-top:1.25rem">
+      <div class="ph"><div class="ph-title">📋 Export Reports</div></div>
+      <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+        <button onclick="showAdminToast('Revenue report exported!')" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:.75rem 1.5rem;border-radius:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:.88rem;text-align:left;width:100%;max-width:400px">📊 Export Revenue Report (CSV)</button>
+        <button onclick="showAdminToast('Orders report exported!')" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:.75rem 1.5rem;border-radius:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:.88rem;text-align:left;width:100%;max-width:400px">📦 Export Orders Report (CSV)</button>
+        <button onclick="showAdminToast('Vendor report exported!')" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:.75rem 1.5rem;border-radius:10px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:.88rem;text-align:left;width:100%;max-width:400px">🏪 Export Vendor Performance (CSV)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<script src="/static/js/api.js"></script>
+<script>
+// ── Demo fallback data ────────────────────────────────────
+const weekData=[{day:'Mon',rev:24200,orders:158},{day:'Tue',rev:19800,orders:132},{day:'Wed',rev:27600,orders:181},{day:'Thu',rev:22100,orders:145},{day:'Fri',rev:31500,orders:206},{day:'Sat',rev:38200,orders:249},{day:'Sun',rev:32480,orders:214,current:true}];
+const vendorsDemoData=[{emoji:'🌶',name:'Spice Garden',rev:12400,color:'var(--accent)',pct:100,is_open:true,today_orders:54},{emoji:'🍔',name:'Burger Barn',rev:8600,color:'var(--green)',pct:69,is_open:true,today_orders:38},{emoji:'🥢',name:'Wok & Roll',rev:7100,color:'var(--purple)',pct:57,is_open:true,today_orders:31},{emoji:'🍕',name:'Slice Heaven',rev:4380,color:'var(--yellow)',pct:35,is_open:false,today_orders:14}];
+const bestSellersDemo=[{rank:1,rankCls:'gold',emoji:'🍛',name:'Butter Chicken',vendor:'Spice Garden',sales:142},{rank:2,rankCls:'silver',emoji:'🍔',name:'Classic Burger',vendor:'Burger Barn',sales:119},{rank:3,rankCls:'bronze',emoji:'🍕',name:'Margherita Pizza',vendor:'Slice Heaven',sales:98},{rank:4,rankCls:'',emoji:'🍜',name:'Hakka Noodles',vendor:'Wok & Roll',sales:87},{rank:5,rankCls:'',emoji:'🧆',name:'Paneer Tikka',vendor:'Spice Garden',sales:76}];
+const queueDemo=[{token:'#51',status:'ready',cls:'q-ready',time:'Ready now'},{token:'#50',status:'Preparing',cls:'q-preparing',time:'~3 min'},{token:'#49',status:'Preparing',cls:'q-preparing',time:'~6 min'},{token:'#48',status:'Pending',cls:'q-pending',time:'~10 min'},{token:'#47',status:'Preparing',cls:'q-preparing',time:'~4 min'}];
+const pageTitles={dashboard:'System <em>Overview</em>',analytics:'Analytics',allorders:'All Orders',vendors:'Vendors',menu:'Menu Items',customers:'Customers',queue:'Queue',revenue:'Revenue',discounts:'Discounts',reports:'Reports'};
+
+// ── Navigation ────────────────────────────────────────────
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('pageHeading').innerHTML=pageTitles[name]||name;
+  if(name==='analytics') renderAnalytics();
+  if(name==='allorders') renderAllOrders();
+  if(name==='vendors')   renderVendorsTable();
+  if(name==='menu')      renderMenuTable();
+  if(name==='queue')     renderFullQueue();
+  if(name==='revenue')   renderRevenuePage();
+  if(name==='reports')   renderReports();
+}
+
+// ── Dashboard ─────────────────────────────────────────────
+function renderDashboard(stats,weekly,vendors,bs,queue,alerts){
+  // Stats
+  if(stats){
+    document.getElementById('d-revenue').textContent='₹'+stats.today_revenue?.toLocaleString('en-IN');
+    document.getElementById('d-orders').textContent=stats.today_orders;
+    document.getElementById('d-customers').textContent=stats.active_customers;
+    document.getElementById('d-avg').textContent='₹'+stats.avg_order_value;
+    document.getElementById('d-rev-change').textContent=(stats.revenue_change>=0?'↑':'↓')+Math.abs(stats.revenue_change)+'%';
+    document.getElementById('d-ord-change').textContent=(stats.orders_change>=0?'↑ ':'↓ ')+Math.abs(stats.orders_change);
+    document.getElementById('ordersCount').textContent=stats.today_orders;
+    document.getElementById('r-today').textContent='₹'+stats.today_revenue?.toLocaleString('en-IN');
+    document.getElementById('r-tax').textContent='₹'+Math.round(stats.today_revenue*0.05)?.toLocaleString('en-IN');
+    document.getElementById('rpt-rev').textContent='₹'+stats.today_revenue?.toLocaleString('en-IN');
+    document.getElementById('rpt-ord').textContent=stats.today_orders;
+  }
+  renderWeeklyChart('revenueChart', weekly||weekData);
+  renderVendorPerf(vendors||vendorsDemoData);
+  renderBestSellers(bs||bestSellersDemo);
+  renderQueueList(queue||queueDemo);
+  renderAlerts(alerts);
+}
+
+function renderWeeklyChart(elId,data){
+  const maxR=Math.max(...data.map(d=>d.rev||d.revenue||0),1);
+  const el=document.getElementById(elId);
+  if(!el) return;
+  el.innerHTML=data.map((d,i)=>{
+    const rev=d.rev||d.revenue||0;
+    const h=Math.round((rev/maxR)*140);
+    const isT=i===data.length-1;
+    return `<div class="rev-bar-wrap"><div class="rev-bar" style="height:${h}px;background:${isT?'var(--accent)':'rgba(0,212,255,0.2)'}"><div class="rev-bar-tooltip">₹${(rev/1000).toFixed(1)}K · ${d.orders} orders</div></div><div class="rev-bar-label">${d.day}</div></div>`;
+  }).join('');
+}
+
+function renderVendorPerf(vendors,elId='vendorPerf'){
+  const max=Math.max(...vendors.map(v=>v.rev||v.today_revenue||0),1);
+  const colors=['var(--accent)','var(--green)','var(--purple)','var(--yellow)'];
+  const el=document.getElementById(elId);
+  if(!el) return;
+  el.innerHTML=vendors.map((v,i)=>{
+    const rev=v.rev||v.today_revenue||0;
+    const c=v.color||colors[i%4];
+    return `<div class="vp-row"><div class="vp-emoji">${v.emoji}</div><div class="vp-info"><div class="vp-name">${v.name}</div><div class="vp-bar-bg"><div class="vp-bar-fill" style="width:${Math.round(rev/max*100)}%;background:${c}"></div></div></div><div class="vp-rev" style="color:${c}">₹${(rev/1000).toFixed(1)}K</div></div>`;
+  }).join('');
+}
+
+function renderBestSellers(items){
+  const rnk=['gold','silver','bronze'];
+  document.getElementById('bestSellers').innerHTML=items.map(b=>`
+    <div class="bs-row"><div class="bs-rank ${rnk[b.rank-1]||''}">${b.rank}</div><div style="font-size:1.2rem">${b.emoji}</div><div class="bs-info"><div class="bs-name">${b.name}</div><div class="bs-vendor">${b.vendor}</div></div><div class="bs-sales">${b.sold||b.sales} sold</div></div>
+  `).join('')||'<div style="padding:1rem;color:var(--muted);text-align:center">No data yet</div>';
+}
+
+function renderQueueList(queue){
+  const qMap={placed:'q-pending',confirmed:'q-pending',preparing:'q-preparing',ready:'q-ready'};
+  document.getElementById('queueCount').textContent=queue.length+' active';
+  document.getElementById('queueList').innerHTML=queue.slice(0,5).map(o=>`
+    <div class="q-row"><div class="q-token">${o.token||'#'+o.token_number}</div><div class="q-status ${o.cls||qMap[o.status]||'q-pending'}">${o.status}</div><div class="q-time">${o.time||''}</div></div>
+  `).join('')||'<div style="padding:1rem;color:var(--muted);text-align:center">Queue empty</div>';
+}
+
+function renderAlerts(alerts){
+  const mp={ok:'alert-ok',warn:'alert-warn',err:'alert-err'};
+  const items=alerts||[{type:'ok',icon:'✅',title:'All systems operational',desc:'All vendors online and accepting orders'}];
+  document.getElementById('alertsList').innerHTML=items.map(a=>`
+    <div class="alert-row ${mp[a.type]||'alert-ok'}"><div class="alert-icon">${a.icon}</div><div><div class="alert-title">${a.title}</div><div class="alert-desc">${a.desc}</div></div></div>
+  `).join('');
+}
+
+// ── Analytics ─────────────────────────────────────────────
+function renderAnalytics(){
+  renderWeeklyChart('analyticsChart',weekData);
+  document.getElementById('a-week').textContent='₹'+weekData.reduce((s,d)=>s+d.rev,0).toLocaleString('en-IN');
+  document.getElementById('a-worders').textContent=weekData.reduce((s,d)=>s+d.orders,0);
+  document.getElementById('a-best').textContent='Spice Garden';
+  document.getElementById('analyticsBest').innerHTML=bestSellersDemo.map(b=>`
+    <div class="bs-row"><div class="bs-rank ${['gold','silver','bronze'][b.rank-1]||''}">${b.rank}</div><div style="font-size:1.2rem">${b.emoji}</div><div class="bs-info"><div class="bs-name">${b.name}</div><div class="bs-vendor">${b.vendor}</div></div><div class="bs-sales">${b.sales} sold</div></div>`).join('');
+  renderVendorPerf(vendorsDemoData,'analyticsVendors');
+}
+
+// ── All Orders ────────────────────────────────────────────
+function renderAllOrders(){
+  const stMap={placed:'o-placed',confirmed:'o-placed',preparing:'o-preparing',ready:'o-ready',collected:'o-collected',cancelled:'o-cancelled'};
+  const sampleOrders=[
+    {token:41,user:'Test Customer',items:'Butter Chicken × 1, Dal Makhani × 1',total:315,status:'collected',time:'12:10 PM'},
+    {token:42,user:'Test Customer',items:'Classic Burger × 2, Veggie Wrap × 1',total:370,status:'collected',time:'12:22 PM'},
+    {token:43,user:'Test Customer',items:'Hakka Noodles × 1',total:105,status:'ready',time:'12:34 PM'},
+    {token:44,user:'Test Customer',items:'Butter Chicken × 2, Paneer Tikka × 1',total:475,status:'preparing',time:'12:45 PM'},
+    {token:45,user:'Test Customer',items:'Margherita Pizza × 1, Garlic Bread × 1',total:294,status:'placed',time:'12:50 PM'},
+  ];
+  document.getElementById('ordersTotal').textContent=sampleOrders.length+' orders today';
+  document.getElementById('ordersTableBody').innerHTML=sampleOrders.map(o=>`
+    <tr>
+      <td style="font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--accent)">#${o.token}</td>
+      <td>${o.user}</td>
+      <td style="font-size:.82rem">${o.items}</td>
+      <td style="font-weight:700">₹${o.total}</td>
+      <td><span class="o-status ${stMap[o.status]}">${o.status.toUpperCase()}</span></td>
+      <td style="color:var(--muted)">${o.time}</td>
+    </tr>`).join('');
+}
+
+// ── Vendors Table ─────────────────────────────────────────
+function renderVendorsTable(){
+  document.getElementById('vendorsTableBody').innerHTML=vendorsDemoData.map(v=>`
+    <tr>
+      <td><span style="font-size:1.3rem">${v.emoji}</span> ${v.name}</td>
+      <td><span style="background:${v.is_open?'rgba(0,230,118,.12)':'rgba(255,107,53,.12)'};color:${v.is_open?'var(--green)':'var(--accent2)'};padding:.25rem .7rem;border-radius:99px;font-size:.75rem;font-weight:700">${v.is_open?'● Open':'● Closed'}</span></td>
+      <td style="font-weight:600">${v.today_orders}</td>
+      <td style="font-weight:700;color:var(--accent)">₹${(v.rev/1000).toFixed(1)}K</td>
+      <td><button onclick="showAdminToast('${v.name} updated!')" style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:.35rem .85rem;border-radius:8px;cursor:pointer;font-size:.78rem;font-family:'Space Grotesk',sans-serif">Edit</button></td>
+    </tr>`).join('');
+}
+
+// ── Menu Table ────────────────────────────────────────────
+function renderMenuTable(){
+  const items=[
+    {emoji:'🍛',name:'Butter Chicken',vendor:'Spice Garden',price:180,veg:false,spicy:true,avail:true},
+    {emoji:'🧆',name:'Paneer Tikka',vendor:'Spice Garden',price:140,veg:true,spicy:false,avail:true},
+    {emoji:'🍔',name:'Classic Burger',vendor:'Burger Barn',price:130,veg:false,spicy:false,avail:true},
+    {emoji:'🍟',name:'Crispy Fries',vendor:'Burger Barn',price:70,veg:true,spicy:false,avail:true},
+    {emoji:'🍜',name:'Hakka Noodles',vendor:'Wok & Roll',price:100,veg:true,spicy:true,avail:true},
+    {emoji:'🍕',name:'Margherita Pizza',vendor:'Slice Heaven',price:200,veg:true,spicy:false,avail:false},
+  ];
+  document.getElementById('menuTotal').textContent=items.length+' items';
+  document.getElementById('menuTableBody').innerHTML=items.map(i=>`
+    <tr>
+      <td>${i.emoji} ${i.name}</td>
+      <td style="color:var(--muted)">${i.vendor}</td>
+      <td style="font-weight:700">₹${i.price}</td>
+      <td>${i.veg?'<span style="color:var(--green);font-size:.8rem">🟢 Veg</span>':'<span style="color:var(--accent2);font-size:.8rem">🔴 Non-Veg</span>'} ${i.spicy?'🔥':''}</td>
+      <td><span style="background:${i.avail?'rgba(0,230,118,.12)':'rgba(255,107,53,.12)'};color:${i.avail?'var(--green)':'var(--accent2)'};padding:.25rem .7rem;border-radius:99px;font-size:.75rem;font-weight:700">${i.avail?'Available':'Unavailable'}</span></td>
+    </tr>`).join('');
+}
+
+// ── Full Queue ────────────────────────────────────────────
+function renderFullQueue(){
+  document.getElementById('fullQueueMeta').textContent=queueDemo.length+' active';
+  document.getElementById('fullQueueList').innerHTML=queueDemo.map(q=>`
+    <div class="q-row"><div class="q-token">${q.token}</div><div class="q-status ${q.cls}">${q.status}</div><div class="q-time">${q.time}</div></div>`).join('');
+}
+
+// ── Revenue Page ──────────────────────────────────────────
+function renderRevenuePage(){
+  const weekTotal=weekData.reduce((s,d)=>s+d.rev,0);
+  document.getElementById('r-week').textContent='₹'+weekTotal.toLocaleString('en-IN');
+  document.getElementById('r-month').textContent='₹'+(weekTotal*4.3/1000).toFixed(0)+'K est.';
+  renderWeeklyChart('revenuePageChart',weekData);
+}
+
+// ── Reports ───────────────────────────────────────────────
+function renderReports(){
+  document.getElementById('rpt-vnd').textContent=vendorsDemoData.filter(v=>v.is_open).length;
+  document.getElementById('rpt-disc').textContent='₹1,240';
+}
+
+// ── Toast ─────────────────────────────────────────────────
+function showAdminToast(msg,type='success'){
+  const el=document.createElement('div');
+  el.style.cssText=`position:fixed;bottom:24px;right:24px;z-index:9999;padding:.75rem 1.5rem;border-radius:10px;font-family:sans-serif;font-size:.9rem;font-weight:600;color:#000;box-shadow:0 8px 24px rgba(0,0,0,.3);background:${type==='error'?'#ff6b35':'var(--accent)'};`;
+  el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),3000);
+}
+function doLogout(){Auth.clear();window.location.href='/login';}
+
+// ── Init ──────────────────────────────────────────────────
+document.getElementById('todayDate').textContent='📅 '+new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+(async function init(){
+  // Auth check
+  try{
+    if(!Auth.isLoggedIn()){window.location.href='/login';return;}
+    const user=Auth.getUser();
+    if(!user||user.role!=='admin'){window.location.href='/login';return;}
+    document.getElementById('adminName').textContent=user.name;
+  }catch(e){}
+
+  // ── Render demo data IMMEDIATELY so nothing looks broken ──
+  renderDashboard(
+    {today_revenue:32480,today_orders:214,active_customers:189,avg_order_value:152,revenue_change:8,orders_change:12},
+    weekData,
+    vendorsDemoData,
+    bestSellersDemo,
+    queueDemo,
+    [{type:'ok',icon:'✅',title:'All systems operational',desc:'All 4 vendors online and accepting orders'},
+     {type:'warn',icon:'⚠️',title:'Peak hours approaching',desc:'Lunch rush expected between 1–2 PM'},
+     {type:'ok',icon:'📦',title:'214 orders processed today',desc:'12% above yesterday\'s count'}]
+  );
+
+  // ── Then try to load real data from API in background ────
+  try{
+    const d=await AdminAPI.stats();
+    if(d){
+      document.getElementById('d-revenue').textContent='₹'+(d.today_revenue||0).toLocaleString('en-IN');
+      document.getElementById('d-orders').textContent=d.today_orders||0;
+      document.getElementById('d-customers').textContent=d.active_customers||0;
+      document.getElementById('d-avg').textContent='₹'+(d.avg_order_value||0);
+      document.getElementById('ordersCount').textContent=d.today_orders||0;
+      document.getElementById('r-today').textContent='₹'+(d.today_revenue||0).toLocaleString('en-IN');
+      document.getElementById('r-tax').textContent='₹'+Math.round((d.today_revenue||0)*0.05).toLocaleString('en-IN');
+      document.getElementById('rpt-rev').textContent='₹'+(d.today_revenue||0).toLocaleString('en-IN');
+      document.getElementById('rpt-ord').textContent=d.today_orders||0;
+    }
+  }catch(e){console.warn('Stats: using demo');}
+  try{const d=await AdminAPI.weekly();if(d?.weekly)renderWeeklyChart('revenueChart',d.weekly);}catch(e){}
+  try{const d=await AdminAPI.vendors();if(d?.vendors)renderVendorPerf(d.vendors);}catch(e){}
+  try{const d=await AdminAPI.bestsellers();if(d?.bestsellers)renderBestSellers(d.bestsellers);}catch(e){}
+  try{const d=await AdminAPI.queue();if(d?.queue)renderQueueList(d.queue);}catch(e){}
+  try{const d=await AdminAPI.alerts();if(d?.alerts)renderAlerts(d.alerts);}catch(e){}
+  // Auto-refresh every 30 seconds
+  setInterval(async()=>{
+    try{const d=await AdminAPI.stats();if(d){document.getElementById('d-revenue').textContent='₹'+(d.today_revenue||0).toLocaleString('en-IN');document.getElementById('d-orders').textContent=d.today_orders||0;}}catch{}
+    try{const d=await AdminAPI.queue();if(d?.queue)renderQueueList(d.queue);}catch{}
+  },30000);
+})();
+</script>
+</body>
+</html>

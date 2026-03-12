@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodCourt — Login</title>
+<!-- Load api.js FIRST -->
+<script src="/static/js/api.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0d0d;--surface:#161616;--card:#1e1e1e;--border:#2a2a2a;--accent:#f5a623;--text:#f0ede8;--muted:#7a7570;--green:#4caf7d;--red:#e8572a;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(245,166,35,.12),transparent 65%);pointer-events:none;}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem;width:100%;max-width:420px;position:relative;z-index:1;}
+  .logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--accent);text-align:center;margin-bottom:.25rem;}
+  .sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:2rem;}
+
+  .tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:2rem;}
+  .tab{flex:1;padding:.6rem;text-align:center;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--muted);transition:all .2s;user-select:none;}
+  .tab.active{background:var(--accent);color:#000;}
+
+  .form-group{margin-bottom:1.25rem;}
+  label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.08em;}
+  input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;}
+  input:focus{border-color:var(--accent);}
+
+  .btn{width:100%;background:var(--accent);border:none;color:#000;padding:1rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.5rem;}
+  .btn:hover{background:#ffc04d;}
+  .btn:disabled{opacity:.6;cursor:not-allowed;}
+
+  .error-msg{background:rgba(232,87,42,.1);border:1px solid rgba(232,87,42,.3);color:var(--red);border-radius:8px;padding:.65rem 1rem;font-size:.84rem;margin-bottom:1rem;display:none;}
+  .error-msg.show{display:block;}
+
+  .success-msg{background:rgba(76,175,77,.1);border:1px solid rgba(76,175,77,.3);color:var(--green);border-radius:8px;padding:.65rem 1rem;font-size:.84rem;margin-bottom:1rem;display:none;}
+  .success-msg.show{display:block;}
+
+  /* Demo credentials box — plain text, no links */
+  .demo-box{margin-top:1.75rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;}
+  .demo-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.75rem;}
+  .demo-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);}
+  .demo-row:last-child{border-bottom:none;}
+  .demo-role{font-size:.75rem;color:var(--muted);min-width:60px;}
+  .demo-email{font-size:.78rem;color:var(--accent);font-weight:600;cursor:pointer;transition:opacity .2s;}
+  .demo-email:hover{opacity:.7;}
+  .demo-pass{font-size:.75rem;color:var(--muted);}
+  .demo-hint{font-size:.7rem;color:var(--muted);margin-top:.6rem;text-align:center;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🍽 FoodCourt</div>
+  <div class="sub">Smart Food Court Management</div>
+
+  <div class="tabs">
+    <div class="tab active" id="loginTab"    onclick="switchTab('login')">Login</div>
+    <div class="tab"        id="registerTab" onclick="switchTab('register')">Register</div>
+  </div>
+
+  <div class="error-msg"   id="errorMsg"></div>
+  <div class="success-msg" id="successMsg"></div>
+
+  <!-- LOGIN FORM -->
+  <div id="loginForm">
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn" id="loginBtn" onclick="doLogin()">Login</button>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div id="registerForm" style="display:none">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="regName" placeholder="Your full name">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="regEmail" placeholder="you@example.com">
+    </div>
+    <div class="form-group">
+      <label>Phone <span style="color:var(--muted);font-size:.7rem">(optional)</span></label>
+      <input type="tel" id="regPhone" placeholder="9XXXXXXXXX">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="regPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
+    </div>
+    <button class="btn" id="registerBtn" onclick="doRegister()">Create Account</button>
+  </div>
+
+  <!-- DEMO CREDENTIALS — plain text, no email links -->
+  <div class="demo-box">
+    <div class="demo-title">Demo Accounts — click email to fill</div>
+    <div class="demo-row">
+      <span class="demo-role">Admin</span>
+      <span class="demo-email" onclick="fillLogin('admin@foodcourt.com','password123')">admin@foodcourt.com</span>
+      <span class="demo-pass">password123</span>
+    </div>
+    <div class="demo-row">
+      <span class="demo-role">Vendor</span>
+      <span class="demo-email" onclick="fillLogin('ravi@spicegarden.com','password123')">ravi@spicegarden.com</span>
+      <span class="demo-pass">password123</span>
+    </div>
+    <div class="demo-row">
+      <span class="demo-role">Customer</span>
+      <span class="demo-email" onclick="fillLogin('customer@test.com','password123')">customer@test.com</span>
+      <span class="demo-pass">password123</span>
+    </div>
+    <div class="demo-hint">👆 Click any email above to auto-fill the form</div>
+  </div>
+</div>
+
+<script>
+// ── Tab switching ─────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('registerTab').classList.toggle('active', tab === 'register');
+  document.getElementById('loginForm').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  hideMessages();
+}
+
+// ── Messages ──────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  document.getElementById('successMsg').classList.remove('show');
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById('successMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  document.getElementById('errorMsg').classList.remove('show');
+}
+
+function hideMessages() {
+  document.getElementById('errorMsg').classList.remove('show');
+  document.getElementById('successMsg').classList.remove('show');
+}
+
+// ── Fill login from demo click ────────────────────────────
+function fillLogin(email, pass) {
+  switchTab('login');
+  document.getElementById('loginEmail').value    = email;
+  document.getElementById('loginPassword').value = pass;
+  document.getElementById('loginEmail').focus();
+}
+
+// ── LOGIN ─────────────────────────────────────────────────
+async function doLogin() {
+  hideMessages();
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!email)    return showError('Please enter your email address');
+  if (!password) return showError('Please enter your password');
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+
+  try {
+    const data = await AuthAPI.login(email, password);
+    showSuccess('Login successful! Redirecting…');
+    const role = data.user.role;
+    setTimeout(() => {
+      if      (role === 'admin')  window.location.href = '/admin';
+      else if (role === 'vendor') window.location.href = '/vendor';
+      else                        window.location.href = '/customer';
+    }, 500);
+  } catch (err) {
+    showError(err.message || 'Login failed. Check your email and password.');
+    btn.disabled    = false;
+    btn.textContent = 'Login';
+  }
+}
+
+// ── REGISTER ──────────────────────────────────────────────
+async function doRegister() {
+  hideMessages();
+  const name     = document.getElementById('regName').value.trim();
+  const email    = document.getElementById('regEmail').value.trim();
+  const phone    = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+
+  // Validate
+  if (!name)               return showError('Please enter your full name');
+  if (!email)              return showError('Please enter your email address');
+  if (!email.includes('@'))return showError('Please enter a valid email address');
+  if (!password)           return showError('Please enter a password');
+  if (password.length < 6) return showError('Password must be at least 6 characters');
+
+  const btn = document.getElementById('registerBtn');
+  btn.disabled    = true;
+  btn.textContent = 'Creating account…';
+
+  try {
+    const data = await AuthAPI.register(name, email, password, phone);
+    showSuccess('Account created! Redirecting…');
+    setTimeout(() => {
+      window.location.href = '/customer';
+    }, 800);
+  } catch (err) {
+    // Show the exact error from the server
+    const msg = err.message || 'Registration failed. Please try again.';
+    showError(msg);
+    btn.disabled    = false;
+    btn.textContent = 'Create Account';
+  }
+}
+
+// ── Auto-redirect if already logged in ───────────────────
+try {
+  if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+    const user = Auth.getUser();
+    if      (user?.role === 'admin')  window.location.href = '/admin';
+    else if (user?.role === 'vendor') window.location.href = '/vendor';
+    else                              window.location.href = '/customer';
+  }
+} catch(e) {}
+</script>
+</body>
+</html>
