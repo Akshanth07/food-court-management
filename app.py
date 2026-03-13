@@ -122,4 +122,4 @@ if __name__ == '__main__':
     debug = os.getenv('FLASK_ENV', 'development') == 'development'
     print(f"\n✅ Serving from: {BASE_DIR}")
     print(f"🌐 Open: http://localhost:{port}\n")
-    app.run(debug=debug, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
