@@ -109,6 +109,33 @@ def create_app():
             db.session.rollback()
             return f'Error: {str(e)}', 500
 
+    @app.route('/add-wokandroll')
+    def add_wokandroll():
+        try:
+            from extensions import User, Vendor, MenuItem
+            if User.query.filter_by(email='wok@rollfood.com').first():
+                return 'Wok and Roll already exists!', 200
+            pw = bcrypt.generate_password_hash('password123').decode('utf-8')
+            user = User(name='Wok and Roll', email='wok@rollfood.com', password=pw, role='vendor')
+            db.session.add(user)
+            db.session.flush()
+            vendor = Vendor(user_id=user.user_id, name='Wok and Roll', emoji='🍜', description='Chinese and Asian cuisine')
+            db.session.add(vendor)
+            db.session.flush()
+            items = [
+                MenuItem(vendor_id=vendor.vendor_id, name='Veg Noodles',      price=100, emoji='🍜', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Chicken Noodles',  price=130, emoji='🍝', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Fried Rice',       price=110, emoji='🥡', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Momos',            price=80,  emoji='🥟', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Manchurian',       price=90,  emoji='🍲', is_available=True),
+            ]
+            for m in items: db.session.add(m)
+            db.session.commit()
+            return 'Wok and Roll added! Login: wok@rollfood.com / password123', 200
+        except Exception as e:
+            db.session.rollback()
+            return f'Error: {str(e)}', 500
+
     return app
 
 
