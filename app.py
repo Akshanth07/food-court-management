@@ -109,6 +109,35 @@ def create_app():
             db.session.add(TokenSequence(id=1, last_token=0))
             db.session.commit()
             return 'Database initialized successfully! All tables and demo data created.', 200
+
+    @app.route('/add-burgerbarn')
+    def add_burgerbarn():
+        try:
+            from extensions import User, Vendor, MenuItem
+            # Check if already exists
+            if User.query.filter_by(email='burger@barnfood.com').first():
+                return 'Burger Barn already exists!', 200
+            from extensions import bcrypt as _bc
+            pw = _bc.generate_password_hash('password123').decode('utf-8')
+            user = User(name='Burger Barn', email='burger@barnfood.com', password=pw, role='vendor')
+            db.session.add(user)
+            db.session.flush()
+            vendor = Vendor(user_id=user.user_id, name='Burger Barn', emoji='🍔', description='Burgers and fast food')
+            db.session.add(vendor)
+            db.session.flush()
+            items = [
+                MenuItem(vendor_id=vendor.vendor_id, name='Classic Burger',  price=120, emoji='🍔', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Chicken Burger',  price=150, emoji='🍗', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Wrap',            price=100, emoji='🌮', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Loaded Fries',    price=80,  emoji='🍟', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Milkshake',       price=90,  emoji='🥤', is_available=True),
+            ]
+            for m in items: db.session.add(m)
+            db.session.commit()
+            return 'Burger Barn added successfully! Login: burger@barnfood.com / password123', 200
+        except Exception as e:
+            db.session.rollback()
+            return f'Error: {str(e)}', 500
         except Exception as e:
             db.session.rollback()
             return f'Error: {str(e)}', 500
