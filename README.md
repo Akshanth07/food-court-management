@@ -1,183 +1,267 @@
-# 🍽 Smart Food Court Management System
-## Setup Guide — Flask + MySQL + XAMPP
+<div align="center">
+
+# 🍽️ Smart Food Court Management System
+
+**A full-stack web application for managing food court operations in real time**
+
+[![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge&logo=python)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.0-black?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?style=for-the-badge&logo=mysql)](https://mysql.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.32-red?style=for-the-badge&logo=streamlit)](https://streamlit.io)
+[![Railway](https://img.shields.io/badge/Deployed_on-Railway-purple?style=for-the-badge&logo=railway)](https://railway.app)
+
+[🌐 Live Demo](https://food-court-management-production.up.railway.app) • [📊 Features](#-features) • [🚀 Setup](#-local-setup) • [📱 Screenshots](#-portals)
+
+</div>
+
+---
+
+## 📌 About
+
+A **Smart Food Court Management System** that digitizes the entire food ordering workflow — from customer ordering to vendor fulfillment to admin oversight — all in real time.
+
+Built as a complete full-stack project with:
+- **3 role-based portals** — Customer, Vendor, Admin
+- **Real-time order tracking** with token system
+- **Analytics dashboard** with AI-powered food recommendations
+- **Cloud deployed** on Railway
+
+---
+
+## ✨ Features
+
+### 👤 Customer Portal
+- Browse menu across all vendors with filters (veg, spicy, price)
+- Add to cart with quantity controls
+- Auto discount (10%) on orders above ₹400
+- Place order → get unique token number
+- Track order live — Pending → Preparing → Ready → Collected
+- View order history and account stats
+
+### 🏪 Vendor Portal
+- Live incoming orders dashboard
+- Advance order status with one click
+- Menu management (add, edit, toggle availability)
+- Today's revenue and sales stats
+- Queue management view
+
+### 🔐 Admin Portal
+- Overview of all vendors and orders
+- Revenue charts and weekly trends
+- Best-selling items analysis
+- Live queue status across all vendors
+- System alerts and notifications
+
+### 📊 Analytics Dashboard (Streamlit)
+- **Customer Segmentation** — 🐋 Whale, 🔄 Regular, 🆕 New, 😴 Inactive
+- **Vendor Scorecard** — Score out of 100 based on revenue, orders, completion
+- **Food Recommendations** — Market Basket Analysis (what items are ordered together)
+- **Reports** — Download PDF and Excel reports by date range
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | HTML, CSS, JavaScript |
+| **Backend** | Python, Flask, Flask-JWT, Flask-Bcrypt |
+| **Database** | MySQL, SQLAlchemy ORM |
+| **Analytics** | Streamlit, Pandas, Reportlab, Openpyxl |
+| **Auth** | JWT Tokens, Bcrypt password hashing |
+| **Deployment** | Railway (app + database) |
+| **Version Control** | Git, GitHub |
+
+---
+
+## 📱 Portals
+
+### Login Page
+Clean login and register interface with role-based redirection
+
+### Customer Portal
+Menu browsing → Cart → Token → Live tracking
+
+### Vendor Portal  
+Live orders → Status management → Menu control
+
+### Admin Portal
+Full oversight → Revenue → Analytics → Alerts
+
+---
+
+## 🏗️ Architecture
+
+```
+Browser (HTML/CSS/JS)
+        ↕  REST API (JSON)
+Flask Backend (Python)
+        ↕  SQLAlchemy ORM
+   MySQL Database
+        
+Streamlit Analytics (separate service)
+        ↕
+   Same MySQL Database
+```
+
+---
+
+## 🔄 Order Flow
+
+```
+Customer places order
+        ↓
+Token number generated (#45)
+        ↓
+Vendor sees → PENDING
+        ↓  (clicks Start)
+Vendor sees → PREPARING
+        ↓  (clicks Ready)
+Customer notified → READY
+        ↓  (customer collects)
+Vendor clicks → COLLECTED ✅
+```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-foodcourt/
-├── app.py                  ← Flask entry point (run this)
-├── config.py               ← DB credentials & settings
+food-court-management/
+├── app.py                  ← Flask entry point
+├── config.py               ← Configuration & DB settings
 ├── extensions.py           ← SQLAlchemy models
-├── requirements.txt        ← Python packages
-├── database.sql            ← Run this in phpMyAdmin first
+├── analytics.py            ← Streamlit dashboard
+├── requirements.txt        ← Python dependencies
+├── Procfile                ← Railway deployment
 ├── api/
-│   ├── auth.py             ← /api/auth/*
-│   ├── menu.py             ← /api/menu/*
-│   ├── orders.py           ← /api/orders/*
-│   ├── vendor.py           ← /api/vendor/*
-│   └── admin.py            ← /api/admin/*
+│   ├── auth.py             ← Login/Register API
+│   ├── menu.py             ← Menu API
+│   ├── orders.py           ← Orders API
+│   ├── vendor.py           ← Vendor API
+│   └── admin.py            ← Admin API
 ├── static/
 │   └── js/
-│       └── api.js          ← Shared API client (include in all pages)
-├── login.html              ← Login/Register page
+│       └── api.js          ← Frontend API client
+├── login.html              ← Login & Register
 ├── customer.html           ← Customer portal
-├── vendor.html             ← Vendor dashboard
-└── admin.html              ← Admin dashboard
+├── vendor.html             ← Vendor portal
+└── admin.html              ← Admin portal
 ```
 
 ---
 
-## ✅ Step 1 — Start XAMPP
+## 🚀 Local Setup
 
-1. Open **XAMPP Control Panel**
-2. Start **Apache** and **MySQL**
-3. Open **phpMyAdmin** at `http://localhost/phpmyadmin`
+### Prerequisites
+- Python 3.9+
+- XAMPP (for local MySQL)
+- Git
 
----
+### Steps
 
-## ✅ Step 2 — Create the Database
-
-1. In phpMyAdmin, click **"New"** in the left sidebar
-2. Create a database called `foodcourt_db`
-3. Click the **SQL** tab
-4. Open `database.sql`, copy ALL contents, paste and click **Go**
-5. You should see all tables created with sample data ✓
-
----
-
-## ✅ Step 3 — Install Python & Dependencies
-
-Make sure Python 3.9+ is installed. Then in your terminal:
-
+**1. Clone the repository**
 ```bash
-# Navigate into the project folder
-cd foodcourt
+git clone https://github.com/Akshanth07/food-court-management.git
+cd food-court-management
+```
 
-# (Recommended) create a virtual environment
+**2. Create virtual environment**
+```bash
 python -m venv venv
-
-# Activate it
-# Windows:
 venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
+```
 
-# Install all required packages
+**3. Install dependencies**
+```bash
 pip install -r requirements.txt
+pip install streamlit pandas openpyxl reportlab
 ```
 
----
+**4. Start XAMPP MySQL and create database**
+- Open XAMPP → Start MySQL
+- Open phpMyAdmin → create database `foodcourt_db`
+- Run `database.sql` in the SQL tab
 
-## ✅ Step 4 — Configure Database Credentials
-
-Open `config.py` and check these lines:
-
-```python
-MYSQL_USER     = 'root'      # XAMPP default
-MYSQL_PASSWORD = ''          # XAMPP default = empty password
-MYSQL_DB       = 'foodcourt_db'
-MYSQL_HOST     = 'localhost'
-```
-
-> If you set a MySQL password in XAMPP, update `MYSQL_PASSWORD` here.
-
----
-
-## ✅ Step 5 — Run the Flask Server
-
+**5. Run Flask app**
 ```bash
 python app.py
 ```
+Open → `http://localhost:5000`
 
-You should see:
+**6. Run Analytics dashboard (separate terminal)**
+```bash
+streamlit run analytics.py
 ```
- * Running on http://0.0.0.0:5000
- * Debug mode: on
-```
-
-Test it: open `http://localhost:5000` in your browser → should show API is running ✓
+Open → `http://localhost:8501`
 
 ---
 
-## ✅ Step 6 — Open the Frontend
+## 🔑 Demo Credentials
 
-Open `login.html` directly in your browser, OR serve it via XAMPP:
-
-**Option A (simple — just double-click):**
-Open `login.html` in Chrome/Firefox directly.
-
-**Option B (via XAMPP Apache — recommended):**
-1. Copy the entire `foodcourt/` folder into `C:\xampp\htdocs\`
-2. Open `http://localhost/foodcourt/login.html`
-
----
-
-## 🔑 Demo Login Credentials
-
-| Role     | Email                        | Password    |
-|----------|------------------------------|-------------|
-| Admin    | admin@foodcourt.com          | password123 |
-| Vendor 1 | ravi@spicegarden.com         | password123 |
-| Vendor 2 | priya@burgerbarn.com         | password123 |
-| Customer | customer@test.com            | password123 |
+| Role | Email | Password |
+|------|-------|----------|
+| 👑 Admin | admin@foodcourt.com | password123 |
+| 🍛 Spice Garden | ravi@spicegarden.com | password123 |
+| 🍔 Quick Bites | priya@quickbites.com | password123 |
+| 🍔 Burger Barn | burger@barnfood.com | password123 |
+| 🍜 Wok and Roll | wok@rollfood.com | password123 |
+| 👤 Customer | customer@test.com | password123 |
 
 ---
 
-## 🔗 API Endpoints Summary
+## 🔗 API Endpoints
 
 ### Auth
-| Method | Endpoint              | Description         |
-|--------|-----------------------|---------------------|
-| POST   | /api/auth/login       | Login → returns JWT |
-| POST   | /api/auth/register    | Register new user   |
-| GET    | /api/auth/me          | Get current user    |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/auth/login | Login → returns JWT |
+| POST | /api/auth/register | Register new user |
+| GET | /api/auth/me | Get current user |
 
-### Menu (Public)
-| Method | Endpoint              | Description         |
-|--------|-----------------------|---------------------|
-| GET    | /api/menu/vendors     | All open vendors    |
-| GET    | /api/menu/items       | All menu items      |
-| GET    | /api/menu/items?vendor_id=1 | Filter by vendor |
+### Menu
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/menu/vendors | All vendors |
+| GET | /api/menu/items | All menu items |
 
-### Orders (Customer)
-| Method | Endpoint              | Description         |
-|--------|-----------------------|---------------------|
-| POST   | /api/orders/place     | Place new order     |
-| GET    | /api/orders/my        | My order history    |
-| GET    | /api/orders/token/47  | Track by token      |
+### Orders
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/orders/place | Place new order |
+| GET | /api/orders/my | Order history |
+| GET | /api/orders/token/{token} | Track by token |
 
-### Vendor Dashboard
-| Method | Endpoint                          | Description          |
-|--------|-----------------------------------|----------------------|
-| GET    | /api/vendor/orders                | Live incoming orders |
-| POST   | /api/vendor/orders/{id}/status    | Update item status   |
-| GET    | /api/vendor/stats                 | Revenue & KPIs       |
-| POST   | /api/vendor/menu                  | Add menu item        |
+### Vendor
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/vendor/orders | Live orders |
+| POST | /api/vendor/orders/{id}/status | Update status |
+| GET | /api/vendor/stats | Revenue & KPIs |
 
-### Admin Dashboard
-| Method | Endpoint                   | Description          |
-|--------|----------------------------|----------------------|
-| GET    | /api/admin/stats           | Overall KPIs         |
-| GET    | /api/admin/revenue/weekly  | 7-day revenue chart  |
-| GET    | /api/admin/vendors         | Vendor performance   |
-| GET    | /api/admin/bestsellers     | Top selling items    |
-| GET    | /api/admin/queue           | Live queue status    |
-| GET    | /api/admin/alerts          | System alerts        |
+### Admin
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/admin/stats | Overall stats |
+| GET | /api/admin/revenue/weekly | Weekly revenue |
+| GET | /api/admin/vendors | Vendor performance |
 
 ---
 
-## 🛠 Troubleshooting
+## 🌐 Live Deployment
 
-**CORS error in browser?**
-→ Make sure Flask is running on port 5000 and Flask-CORS is installed.
+The app is deployed on **Railway** with a cloud MySQL database.
 
-**MySQL connection refused?**
-→ Start MySQL in XAMPP Control Panel.
+🔗 **Live URL:** https://food-court-management-production.up.railway.app
 
-**ModuleNotFoundError?**
-→ Run `pip install -r requirements.txt` again with venv activated.
+---
 
-**Token not working?**
-→ Clear localStorage in browser DevTools → Console: `localStorage.clear()`
+## 👨‍💻 Developer
+
+**Akshanth** — Full Stack Developer
+
+---
+
+<div align="center">
+Made with ❤️ using Python, Flask, and MySQL
+</div>
