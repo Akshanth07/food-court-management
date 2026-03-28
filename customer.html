@@ -196,6 +196,128 @@
   .del-btn{width:100%;background:rgba(232,87,42,.08);border:1px solid rgba(232,87,42,.25);color:var(--accent2);padding:.85rem;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:600;cursor:pointer;margin-top:.6rem;transition:all .2s;}
   .del-btn:hover{background:rgba(232,87,42,.15);}
 
+  /* ── LIVE QUEUE BANNER ─────────────── */
+  .queue-banner{margin:0 2rem 1.5rem;border-radius:16px;overflow:hidden;border:1px solid rgba(0,212,255,.2);background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(0,212,255,.02));animation:fadeIn .4s ease;}
+  .queue-banner-inner{padding:1rem 1.4rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;}
+  .queue-live-dot{width:9px;height:9px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,.6);animation:livePulse 1.5s infinite;flex-shrink:0;}
+  @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.5)}50%{box-shadow:0 0 0 7px rgba(0,212,255,0)}}
+  .queue-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:#00d4ff;font-weight:600;}
+  .queue-token-info{display:flex;align-items:center;gap:.5rem;}
+  .queue-token-num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--accent);line-height:1;}
+  .queue-position{font-size:.8rem;color:var(--muted);}
+  .queue-position strong{color:var(--text);}
+  .queue-wait{font-size:.78rem;color:var(--muted);padding:.25rem .8rem;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid var(--border);}
+  .queue-wait.fast{border-color:rgba(76,175,125,.4);color:var(--green);}
+  .queue-wait.medium{border-color:rgba(245,166,35,.4);color:var(--accent);}
+  .queue-wait.slow{border-color:rgba(232,87,42,.4);color:var(--accent2);}
+  .queue-vendors{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;width:100%;}
+  .queue-vendor-chip{font-size:.68rem;padding:.2rem .7rem;border-radius:99px;border:1px solid var(--border);color:var(--muted);background:var(--card);display:flex;align-items:center;gap:.35rem;}
+  .queue-vendor-chip .qv-dot{width:6px;height:6px;border-radius:50%;}
+  .qv-dot.open{background:var(--green);}
+  .qv-dot.busy{background:var(--accent);}
+  .qv-dot.closed{background:var(--accent2);}
+  .queue-refresh{margin-left:auto;font-size:.72rem;color:var(--muted);cursor:pointer;padding:.3rem .7rem;border:1px solid var(--border);border-radius:99px;transition:all .2s;background:none;font-family:'DM Sans',sans-serif;}
+  .queue-refresh:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ── VENDOR WAIT BADGE on tabs ─────── */
+  .vtab .wait-badge{font-size:.55rem;padding:.1rem .4rem;border-radius:99px;margin-left:.2rem;font-weight:700;}
+  .wait-badge.fast{background:rgba(76,175,125,.15);color:var(--green);}
+  .wait-badge.medium{background:rgba(245,166,35,.15);color:var(--accent);}
+  .wait-badge.slow{background:rgba(232,87,42,.15);color:var(--accent2);}
+
+  /* ── AI RECOMMENDATION BAR ─────────── */
+  .ai-rec-bar{margin:0 2rem 1.5rem;padding:1rem 1.4rem;border-radius:16px;border:1px solid rgba(168,85,247,.25);background:linear-gradient(135deg,rgba(168,85,247,.06),rgba(168,85,247,.02));display:none;animation:fadeIn .4s ease;}
+  .ai-rec-bar.show{display:block;}
+  .ai-rec-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;}
+  .ai-rec-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:#a855f7;font-weight:600;}
+  .ai-rec-items{display:flex;gap:.6rem;flex-wrap:wrap;}
+  .ai-rec-card{background:var(--card);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:.6rem .9rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:.5rem;}
+  .ai-rec-card:hover{border-color:#a855f7;transform:translateY(-2px);box-shadow:0 6px 20px rgba(168,85,247,.15);}
+  .ai-rec-emoji{font-size:1.3rem;}
+  .ai-rec-info{}
+  .ai-rec-name{font-size:.8rem;font-weight:600;color:var(--text);}
+  .ai-rec-reason{font-size:.65rem;color:#a855f7;}
+  .ai-rec-price{font-size:.75rem;color:var(--accent);font-weight:700;margin-top:.1rem;}
+
+  /* ── SMART PROFILE PAGE ────────────── */
+  .profile-hero{background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(245,166,35,.08));border:1px solid rgba(168,85,247,.2);border-radius:22px;padding:2rem;margin-bottom:1.25rem;position:relative;overflow:hidden;}
+  .profile-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.15),transparent 70%);pointer-events:none;}
+  .profile-avatar-wrap{display:flex;align-items:center;gap:1.4rem;margin-bottom:1.5rem;}
+  .profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#a855f7,var(--accent));display:flex;align-items:center;justify-content:center;font-size:1.9rem;font-family:'Playfair Display',serif;color:#fff;font-weight:700;box-shadow:0 8px 24px rgba(168,85,247,.3);position:relative;}
+  .profile-level-badge{position:absolute;bottom:-4px;right:-4px;background:var(--accent);color:#000;font-size:.55rem;font-weight:800;padding:.15rem .4rem;border-radius:99px;border:2px solid var(--bg);}
+  .profile-name{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.2rem;}
+  .profile-email{font-size:.83rem;color:var(--muted);}
+  .profile-tier{display:inline-flex;align-items:center;gap:.4rem;margin-top:.4rem;padding:.25rem .75rem;border-radius:99px;font-size:.72rem;font-weight:700;}
+  .tier-bronze{background:rgba(180,100,40,.15);border:1px solid rgba(180,100,40,.3);color:#cd7f32;}
+  .tier-silver{background:rgba(180,180,180,.12);border:1px solid rgba(180,180,180,.3);color:#c0c0c0;}
+  .tier-gold{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--accent);}
+  .tier-platinum{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:#a855f7;}
+
+  /* Profile stats row */
+  .profile-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem;}
+  .ps-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;text-align:center;transition:border-color .2s;}
+  .ps-card:hover{border-color:rgba(168,85,247,.3);}
+  .ps-val{font-family:'Playfair Display',serif;font-size:1.6rem;background:linear-gradient(135deg,#a855f7,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .ps-lbl{font-size:.63rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem;}
+
+  /* Loyalty progress */
+  .loyalty-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.4rem;margin-bottom:1.25rem;}
+  .loyalty-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+  .loyalty-title{font-family:'Playfair Display',serif;font-size:1.05rem;}
+  .loyalty-pts{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--accent);}
+  .loyalty-pts span{font-size:.75rem;color:var(--muted);font-family:'DM Sans',sans-serif;}
+  .loyalty-bar-wrap{background:rgba(255,255,255,.05);border-radius:99px;height:8px;margin-bottom:.6rem;overflow:hidden;}
+  .loyalty-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#a855f7,var(--accent));transition:width 1s ease;}
+  .loyalty-bar-labels{display:flex;justify-content:space-between;font-size:.67rem;color:var(--muted);}
+  .loyalty-rewards{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;}
+  .reward-chip{padding:.35rem .9rem;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid var(--border);color:var(--muted);background:var(--surface);}
+  .reward-chip.unlocked{border-color:var(--accent);color:var(--accent);background:rgba(245,166,35,.08);}
+
+  /* Taste DNA */
+  .taste-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.4rem;margin-bottom:1.25rem;}
+  .taste-title{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:1rem;}
+  .taste-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+  .taste-tag{padding:.35rem .9rem;border-radius:99px;font-size:.75rem;font-weight:600;}
+  .tt-spicy{background:rgba(232,87,42,.12);border:1px solid rgba(232,87,42,.25);color:var(--accent2);}
+  .tt-veg{background:rgba(76,175,125,.12);border:1px solid rgba(76,175,125,.25);color:var(--green);}
+  .tt-sweet{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);color:var(--accent);}
+  .tt-asian{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:#00d4ff;}
+  .tt-indian{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);color:#a855f7;}
+  .taste-top-items{display:flex;flex-direction:column;gap:.5rem;}
+  .taste-item-row{display:flex;align-items:center;gap:.75rem;padding:.6rem .8rem;background:var(--surface);border-radius:10px;border:1px solid var(--border);}
+  .taste-rank{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--accent);min-width:20px;}
+  .taste-item-name{flex:1;font-size:.83rem;font-weight:500;}
+  .taste-item-count{font-size:.72rem;color:var(--muted);}
+  .taste-bar{height:3px;background:var(--border);border-radius:99px;margin-top:.3rem;overflow:hidden;}
+  .taste-bar-fill{height:100%;background:linear-gradient(90deg,#a855f7,var(--accent));border-radius:99px;}
+
+  /* Dietary preferences */
+  .pref-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.25rem;}
+  .pref-title{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);font-family:'Playfair Display',serif;font-size:1.05rem;}
+  .pref-row{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.4rem;border-bottom:1px solid var(--border);}
+  .pref-row:last-child{border-bottom:none;}
+  .pref-lbl{font-size:.86rem;font-weight:500;}
+  .pref-sub{font-size:.72rem;color:var(--muted);margin-top:.1rem;}
+  .toggle{width:44px;height:24px;border-radius:99px;border:none;cursor:pointer;position:relative;transition:background .25s;flex-shrink:0;}
+  .toggle.on{background:var(--accent);}
+  .toggle.off{background:var(--border);}
+  .toggle::after{content:'';position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  .toggle.on::after{left:23px;}
+  .toggle.off::after{left:3px;}
+
+  /* Order history in profile */
+  .recent-orders{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.4rem;margin-bottom:1.25rem;}
+  .ro-title{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:1rem;}
+  .ro-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 0;border-bottom:1px solid var(--border);}
+  .ro-item:last-child{border-bottom:none;}
+  .ro-token{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent);min-width:44px;}
+  .ro-info{flex:1;}
+  .ro-items-text{font-size:.8rem;font-weight:500;}
+  .ro-date{font-size:.7rem;color:var(--muted);}
+  .ro-total{font-size:.85rem;font-weight:700;color:var(--text);}
+  .ro-reorder{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:.3rem .75rem;border-radius:99px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+  .ro-reorder:hover{background:var(--accent);color:#000;}
+
   /* ── RESPONSIVE ────────────────────── */
   @media(max-width:640px){
     nav{padding:0 .75rem;gap:.5rem;}
@@ -205,6 +327,9 @@
     .menu-section{padding:1rem;}
     .inner-page{padding:1.25rem;}
     .acct-stats{grid-template-columns:repeat(2,1fr);}
+    .profile-stats{grid-template-columns:repeat(2,1fr);}
+    .queue-banner{margin:0 1rem 1rem;}
+    .ai-rec-bar{margin:0 1rem 1rem;}
   }
 </style>
 </head>
@@ -217,7 +342,7 @@
     <div class="nav-tab active"  id="tab-menu"     onclick="showPage('menu')">🍽 Menu</div>
     <div class="nav-tab"         id="tab-track"    onclick="showPage('track')">📍 Track</div>
     <div class="nav-tab"         id="tab-myorders" onclick="showPage('myorders')">📋 My Orders</div>
-    <div class="nav-tab"         id="tab-account"  onclick="showPage('account')">👤 Account</div>
+    <div class="nav-tab"         id="tab-profile"  onclick="showPage('profile')">✨ My Profile</div>
   </div>
   <div class="nav-right">
     <div class="token-badge" id="tokenBadge" onclick="showPage('track')">🎫 No Token</div>
@@ -238,6 +363,34 @@
   </div>
 
   <div class="menu-section">
+    <!-- ── LIVE QUEUE COUNTER ── -->
+    <div class="queue-banner" id="queueBanner" style="display:none;">
+      <div class="queue-banner-inner">
+        <div class="queue-live-dot"></div>
+        <div>
+          <div class="queue-label">Live Queue</div>
+          <div class="queue-token-info">
+            <div class="queue-token-num" id="queueTokenNum">#—</div>
+            <div class="queue-position" id="queuePosition"><strong>—</strong> orders ahead</div>
+          </div>
+        </div>
+        <div class="queue-wait" id="queueWait">Calculating…</div>
+        <button class="queue-refresh" onclick="refreshQueue()">↻ Refresh</button>
+      </div>
+      <div class="queue-banner-inner" style="padding-top:0;">
+        <div class="queue-vendors" id="queueVendors"></div>
+      </div>
+    </div>
+
+    <!-- ── AI RECOMMENDATION BAR ── -->
+    <div class="ai-rec-bar" id="aiRecBar">
+      <div class="ai-rec-header">
+        <span style="font-size:1rem;">✨</span>
+        <span class="ai-rec-title">Recommended for you</span>
+        <span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">based on your taste profile</span>
+      </div>
+      <div class="ai-rec-items" id="aiRecItems"></div>
+    </div>
     <div class="section-label">Vendors</div>
     <div class="vendor-tabs" id="vendorTabs">
       <div class="vtab active" id="vt-all" onclick="filterVendor('all',this)"><span class="dot"></span>All</div>
@@ -281,39 +434,103 @@
   </div>
 </div>
 
-<!-- ══ PAGE: ACCOUNT ══════════════════════════════════════ -->
-<div class="page" id="page-account">
+<!-- ══ PAGE: SMART PROFILE ════════════════════════════════ -->
+<div class="page" id="page-profile">
   <div class="inner-page">
-    <div class="acct-hero">
-      <div class="acct-avatar" id="acctInitials">?</div>
-      <div>
-        <div class="acct-name" id="acctName">—</div>
-        <div class="acct-email" id="acctEmail">—</div>
-        <span class="acct-role-badge">Customer</span>
+
+    <!-- Hero -->
+    <div class="profile-hero">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar">
+          <span id="profInitials">?</span>
+          <div class="profile-level-badge" id="profLevelBadge">L1</div>
+        </div>
+        <div>
+          <div class="profile-name" id="profName">—</div>
+          <div class="profile-email" id="profEmail">—</div>
+          <div class="profile-tier tier-bronze" id="profTier">🥉 Bronze Member</div>
+        </div>
       </div>
     </div>
 
-    <div class="acct-stats">
-      <div class="as-card"><div class="as-val" id="statOrders">0</div><div class="as-lbl">Orders</div></div>
-      <div class="as-card"><div class="as-val" id="statSpent">₹0</div><div class="as-lbl">Spent</div></div>
-      <div class="as-card"><div class="as-val" id="statSaved">₹0</div><div class="as-lbl">Saved</div></div>
+    <!-- Stats -->
+    <div class="profile-stats">
+      <div class="ps-card"><div class="ps-val" id="profOrders">0</div><div class="ps-lbl">Orders</div></div>
+      <div class="ps-card"><div class="ps-val" id="profSpent">₹0</div><div class="ps-lbl">Total Spent</div></div>
+      <div class="ps-card"><div class="ps-val" id="profSaved">₹0</div><div class="ps-lbl">Saved</div></div>
+      <div class="ps-card"><div class="ps-val" id="profPoints">0</div><div class="ps-lbl">Points</div></div>
     </div>
 
-    <div class="acct-panel">
-      <div class="ap-title">👤 Profile</div>
-      <div class="ap-row"><div><div class="ap-lbl">Full Name</div></div><input class="ap-input" id="editName" placeholder="Your name"></div>
-      <div class="ap-row"><div><div class="ap-lbl">Email</div><div class="ap-sub">Cannot be changed</div></div><div class="ap-val" id="editEmail">—</div></div>
-      <div class="ap-row"><div><div class="ap-lbl">Phone</div></div><input class="ap-input" id="editPhone" placeholder="9XXXXXXXXX"></div>
+    <!-- Loyalty -->
+    <div class="loyalty-card">
+      <div class="loyalty-header">
+        <div class="loyalty-title">🎯 Loyalty Points</div>
+        <div class="loyalty-pts"><span id="loyaltyPts">0</span> <span>pts</span></div>
+      </div>
+      <div class="loyalty-bar-wrap">
+        <div class="loyalty-bar-fill" id="loyaltyBarFill" style="width:0%"></div>
+      </div>
+      <div class="loyalty-bar-labels">
+        <span id="loyaltyBarLeft">0 pts</span>
+        <span id="loyaltyBarMid"></span>
+        <span id="loyaltyBarRight">500 pts for Gold</span>
+      </div>
+      <div class="loyalty-rewards">
+        <div class="reward-chip" id="reward50">🎁 ₹50 off at 100pts</div>
+        <div class="reward-chip" id="reward100">🎁 ₹100 off at 300pts</div>
+        <div class="reward-chip" id="rewardGold">⭐ Gold Tier at 500pts</div>
+      </div>
     </div>
 
-    <div class="acct-panel">
-      <div class="ap-title">⚙️ Preferences</div>
-      <div class="ap-row"><div><div class="ap-lbl">Order Ready Alerts</div><div class="ap-sub">Notify when food is ready</div></div><input type="checkbox" checked style="accent-color:var(--accent);width:18px;height:18px;cursor:pointer"></div>
-      <div class="ap-row"><div><div class="ap-lbl">Default Vendor</div></div><div class="ap-val">All Vendors</div></div>
+    <!-- Taste DNA -->
+    <div class="taste-card">
+      <div class="taste-title">🧬 Your Taste DNA</div>
+      <div class="taste-tags" id="tasteTags"></div>
+      <div style="font-size:.7rem;color:var(--muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.1em;">Top Ordered Items</div>
+      <div class="taste-top-items" id="tasteTopItems">
+        <div style="color:var(--muted);font-size:.83rem;">Place orders to build your taste profile!</div>
+      </div>
+    </div>
+
+    <!-- Dietary Preferences -->
+    <div class="pref-card">
+      <div class="pref-title">⚙️ Dietary Preferences</div>
+      <div class="pref-row">
+        <div><div class="pref-lbl">🥦 Veg Only</div><div class="pref-sub">Hide non-vegetarian items</div></div>
+        <button class="toggle off" id="togVeg" onclick="togglePref('veg',this)"></button>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-lbl">🌶 Show Spicy Items</div><div class="pref-sub">Include spicy dishes in recommendations</div></div>
+        <button class="toggle on" id="togSpicy" onclick="togglePref('spicy',this)"></button>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-lbl">💰 Budget Mode</div><div class="pref-sub">Prioritize items under ₹100</div></div>
+        <button class="toggle off" id="togBudget" onclick="togglePref('budget',this)"></button>
+      </div>
+      <div class="pref-row">
+        <div><div class="pref-lbl">✨ Smart Recommendations</div><div class="pref-sub">Show AI picks on the menu page</div></div>
+        <button class="toggle on" id="togRec" onclick="togglePref('rec',this)"></button>
+      </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="recent-orders">
+      <div class="ro-title">🕐 Recent Orders</div>
+      <div id="recentOrdersList">
+        <div style="color:var(--muted);font-size:.83rem;">No orders yet.</div>
+      </div>
+    </div>
+
+    <!-- Edit Profile -->
+    <div class="pref-card">
+      <div class="pref-title">👤 Edit Profile</div>
+      <div class="pref-row"><div><div class="pref-lbl">Full Name</div></div><input class="ap-input" id="editName" placeholder="Your name"></div>
+      <div class="pref-row"><div><div class="pref-lbl">Email</div><div class="pref-sub">Cannot be changed</div></div><div style="font-size:.86rem;color:var(--muted)" id="editEmail">—</div></div>
+      <div class="pref-row"><div><div class="pref-lbl">Phone</div></div><input class="ap-input" id="editPhone" placeholder="9XXXXXXXXX"></div>
     </div>
 
     <button class="save-btn" onclick="saveProfile()">💾 Save Changes</button>
-    <button class="del-btn" onclick="doLogout()">🚪 Logout</button>
+    <button class="del-btn" style="margin-top:.75rem" onclick="doLogout()">🚪 Logout</button>
   </div>
 </div>
 
@@ -355,55 +572,73 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
-//  ALL APPLICATION LOGIC — runs after DOM is ready
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  FOODCOURT CUSTOMER PORTAL — Smart Profile + Live Queue
+// ══════════════════════════════════════════════════════════════
 
-// ── Menu Data — loaded dynamically from API ────────────────
+// ── Menu Data — loaded from API ────────────────────────────────
 const menuData = [];
 
-// ── State ─────────────────────────────────────────────────
+// ── User Preferences (persisted in localStorage) ───────────────
+const Prefs = {
+  _key: 'fc_prefs',
+  get() { try { return JSON.parse(localStorage.getItem(this._key) || '{}'); } catch(e) { return {}; } },
+  set(k, v) { const p = this.get(); p[k] = v; localStorage.setItem(this._key, JSON.stringify(p)); },
+  val(k, def) { const v = this.get()[k]; return v === undefined ? def : v; }
+};
+
+// ── Order History (local store for taste DNA) ──────────────────
+const OrderHistory = {
+  _key: 'fc_order_history',
+  get() { try { return JSON.parse(localStorage.getItem(this._key) || '[]'); } catch(e) { return []; } },
+  add(order) {
+    const h = this.get();
+    h.unshift(order);
+    if (h.length > 50) h.pop();
+    localStorage.setItem(this._key, JSON.stringify(h));
+  }
+};
+
+// ── State ──────────────────────────────────────────────────────
 let cart         = [];
 let activeVendor = 'all';
 let activeType   = 'all';
 let searchQ      = '';
 let currentToken = null;
 let myOrders     = [];
+let queueInterval = null;
 
-// ════════════════════════
+// ══════════════════════════════
 //  NAVIGATION
-// ════════════════════════
+// ══════════════════════════════
 function showPage(name) {
-  // hide all pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  // remove active from all nav tabs
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  // show target page
-  const pg = document.getElementById('page-' + name);
-  if (pg) pg.classList.add('active');
-  // activate matching tab
+  const pg  = document.getElementById('page-' + name);
   const tab = document.getElementById('tab-' + name);
+  if (pg)  pg.classList.add('active');
   if (tab) tab.classList.add('active');
-  // per-page load
   if (name === 'track')    renderTrackPage();
   if (name === 'myorders') renderMyOrders();
-  if (name === 'account')  renderAccount();
+  if (name === 'profile')  renderSmartProfile();
 }
 
-// ════════════════════════
-//  MENU
-// ════════════════════════
+// ══════════════════════════════
+//  MENU RENDERING
+// ══════════════════════════════
 function renderMenu() {
   const grid = document.getElementById('menuGrid');
   if (!grid) return;
 
-  // Show loading if data not yet fetched
   if (!menuData.length) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:.75rem">⏳</div><p>Loading menu…</p></div>';
     return;
   }
 
-  const q = searchQ.toLowerCase();
+  const q        = searchQ.toLowerCase();
+  const vegOnly  = Prefs.val('veg', false);
+  const budgetM  = Prefs.val('budget', false);
+
   const filtered = menuData.filter(item => {
     const matchV = activeVendor === 'all' || item.vendor === activeVendor;
     const matchS = !q || item.name.toLowerCase().includes(q) || item.vendor.toLowerCase().includes(q);
@@ -411,12 +646,15 @@ function renderMenu() {
       || (activeType === 'veg'   && item.veg)
       || (activeType === 'spicy' && item.hot)
       || (activeType === 'cheap' && item.price < 100);
-    return matchV && matchS && matchT;
+    const matchPref = (!vegOnly || item.veg) && (!budgetM || item.price < 100);
+    return matchV && matchS && matchT && matchPref;
   });
+
   if (!filtered.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">No items match. Try a different filter.</div>';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">No items match your filters.</div>';
     return;
   }
+
   grid.innerHTML = filtered.map(item => `
     <div class="menu-card" onclick="addToCart(${item.id})">
       <div class="mc-img">${item.emoji}</div>
@@ -454,9 +692,330 @@ function filterMenu() {
   renderMenu();
 }
 
-// ════════════════════════
+// ══════════════════════════════
+//  LIVE QUEUE COUNTER
+// ══════════════════════════════
+async function refreshQueue() {
+  if (!currentToken) return;
+  try {
+    const banner = document.getElementById('queueBanner');
+    banner.style.display = 'block';
+    document.getElementById('queueTokenNum').textContent = '#' + currentToken;
+
+    // Fetch all active orders to calculate position
+    let position = 0;
+    let vendorData = [];
+    try {
+      const data = await OrdersAPI.myOrders();
+      if (data.orders) myOrders = data.orders;
+      // Count orders with token less than current that are not collected/cancelled
+      const activeOrders = myOrders.filter(o =>
+        !['collected','cancelled'].includes(o.status) &&
+        o.token_number < currentToken
+      );
+      position = activeOrders.length;
+    } catch(e) {}
+
+    // Update position display
+    const posEl = document.getElementById('queuePosition');
+    if (position === 0) {
+      posEl.innerHTML = '<strong style="color:var(--green)">You\'re next!</strong>';
+    } else {
+      posEl.innerHTML = `<strong>${position}</strong> order${position>1?'s':''} ahead`;
+    }
+
+    // Estimate wait time
+    const waitMins = position === 0 ? 2 : position * 4;
+    const waitEl   = document.getElementById('queueWait');
+    waitEl.textContent = position === 0 ? '🍽 Ready Soon!' : `~${waitMins} min wait`;
+    waitEl.className   = 'queue-wait ' + (waitMins <= 5 ? 'fast' : waitMins <= 12 ? 'medium' : 'slow');
+
+    // Show vendor status chips
+    try {
+      const vdata = await MenuAPI.getVendors();
+      if (vdata.vendors) {
+        const el = document.getElementById('queueVendors');
+        el.innerHTML = vdata.vendors.map(v => {
+          const busy = Math.random() > 0.5; // In real app: based on active order count
+          const cls  = v.is_open ? (busy ? 'busy' : 'open') : 'closed';
+          const lbl  = v.is_open ? (busy ? 'Busy' : 'Open') : 'Closed';
+          return `<div class="queue-vendor-chip"><span class="qv-dot ${cls}"></span>${v.emoji||'🍽'} ${v.name} <span style="color:var(--muted)">· ${lbl}</span></div>`;
+        }).join('');
+      }
+    } catch(e) {}
+
+  } catch(e) {}
+}
+
+function startQueuePolling() {
+  refreshQueue();
+  if (queueInterval) clearInterval(queueInterval);
+  queueInterval = setInterval(refreshQueue, 30000); // refresh every 30s
+}
+
+// ══════════════════════════════
+//  AI RECOMMENDATIONS
+// ══════════════════════════════
+function buildRecommendations() {
+  if (!Prefs.val('rec', true)) return;
+  if (!menuData.length) return;
+
+  const history   = OrderHistory.get();
+  const vegOnly   = Prefs.val('veg', false);
+  const likeSpicy = Prefs.val('spicy', true);
+  const budget    = Prefs.val('budget', false);
+
+  // Count item frequency from history
+  const freq = {};
+  history.forEach(order => {
+    (order.items || []).forEach(item => {
+      const name = item.item_name || item.name;
+      if (name) freq[name] = (freq[name] || 0) + (item.quantity || 1);
+    });
+  });
+
+  // Score each menu item
+  const scored = menuData
+    .filter(item => (!vegOnly || item.veg) && (!budget || item.price < 100))
+    .map(item => {
+      let score = 0;
+      // Boost frequently ordered items
+      if (freq[item.name]) score += freq[item.name] * 10;
+      // Slight preference for veg if they order mostly veg
+      if (item.veg) score += 2;
+      // Spicy preference
+      if (item.hot && likeSpicy) score += 3;
+      // Desserts always score well in evenings
+      const hr = new Date().getHours();
+      if (hr >= 14 && item.vendor === 'Sweet Spot') score += 5;
+      // Lunch boost for heavy items
+      if (hr >= 12 && hr <= 14 && item.price > 100) score += 3;
+      // Add slight randomness so it doesn't always show same items
+      score += Math.random() * 2;
+      return { ...item, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  const reasons = {
+    high_freq:  'Ordered before',
+    new_item:   'Popular today',
+    time_based: 'Great right now',
+    default:    'You might like this',
+  };
+
+  const bar = document.getElementById('aiRecBar');
+  const el  = document.getElementById('aiRecItems');
+  if (!scored.length) return;
+
+  el.innerHTML = scored.map((item, i) => {
+    const reason = freq[item.name] ? 'Ordered before' :
+                   (i === 0 ? 'Popular today' : 'You might like this');
+    return `
+      <div class="ai-rec-card" onclick="addToCart(${item.id})">
+        <div class="ai-rec-emoji">${item.emoji}</div>
+        <div class="ai-rec-info">
+          <div class="ai-rec-name">${item.name}</div>
+          <div class="ai-rec-reason">✦ ${reason}</div>
+          <div class="ai-rec-price">₹${item.price}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  bar.classList.add('show');
+}
+
+// ══════════════════════════════
+//  SMART PROFILE
+// ══════════════════════════════
+function renderSmartProfile() {
+  const user = (typeof Auth !== 'undefined') ? Auth.getUser() : null;
+  if (!user) return;
+
+  // Basic info
+  const initials = (user.name||'?').split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+  setEl('profInitials', initials);
+  setEl('profName',     user.name);
+  setEl('profEmail',    user.email);
+  const en = document.getElementById('editName');
+  const ep = document.getElementById('editPhone');
+  if (en) en.value = user.name || '';
+  if (ep) ep.value = user.phone || '';
+  document.getElementById('editEmail').textContent = user.email || '—';
+
+  // Compute stats from orders
+  const total  = myOrders.reduce((s,o) => s + parseFloat(o.total||0), 0);
+  const saved  = myOrders.reduce((s,o) => s + parseFloat(o.discount||0), 0);
+  const points = Math.floor(total / 10); // ₹10 = 1 point
+
+  setEl('profOrders', myOrders.length);
+  setEl('profSpent',  '₹' + Math.round(total));
+  setEl('profSaved',  '₹' + Math.round(saved));
+  setEl('profPoints', points);
+
+  // Tier calculation
+  const tierEl = document.getElementById('profTier');
+  const lvlEl  = document.getElementById('profLevelBadge');
+  let tier, tierClass, level;
+  if (points >= 500)      { tier='⭐ Platinum Member'; tierClass='tier-platinum'; level='L4'; }
+  else if (points >= 300) { tier='🥇 Gold Member';     tierClass='tier-gold';     level='L3'; }
+  else if (points >= 100) { tier='🥈 Silver Member';   tierClass='tier-silver';   level='L2'; }
+  else                    { tier='🥉 Bronze Member';   tierClass='tier-bronze';   level='L1'; }
+  tierEl.textContent  = tier;
+  tierEl.className    = 'profile-tier ' + tierClass;
+  lvlEl.textContent   = level;
+
+  // Loyalty bar
+  const nextMilestone = points < 100 ? 100 : points < 300 ? 300 : points < 500 ? 500 : 1000;
+  const prevMilestone = points < 100 ? 0   : points < 300 ? 100 : points < 500 ? 300 : 500;
+  const pct = Math.min(100, Math.round(((points - prevMilestone) / (nextMilestone - prevMilestone)) * 100));
+  setEl('loyaltyPts', points);
+  document.getElementById('loyaltyBarFill').style.width = pct + '%';
+  setEl('loyaltyBarLeft',  points + ' pts');
+  setEl('loyaltyBarRight', nextMilestone + ' pts for ' + (nextMilestone === 100 ? 'Silver' : nextMilestone === 300 ? 'Gold' : nextMilestone === 500 ? 'Platinum' : 'Max'));
+
+  // Reward chips
+  if (points >= 100)  document.getElementById('reward50').classList.add('unlocked');
+  if (points >= 300)  document.getElementById('reward100').classList.add('unlocked');
+  if (points >= 500)  document.getElementById('rewardGold').classList.add('unlocked');
+
+  // Taste DNA
+  buildTasteDNA();
+
+  // Pref toggles
+  const prefs = Prefs.get();
+  ['veg','spicy','budget','rec'].forEach(k => {
+    const btn = document.getElementById('tog' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (!btn) return;
+    const defaults = {veg:false, spicy:true, budget:false, rec:true};
+    const val = (prefs[k] !== undefined) ? prefs[k] : defaults[k];
+    btn.className = 'toggle ' + (val ? 'on' : 'off');
+  });
+
+  // Recent orders
+  renderRecentOrders();
+}
+
+function buildTasteDNA() {
+  const history = OrderHistory.get();
+  const allItems = myOrders.flatMap(o => o.items || []);
+
+  // Count item frequency
+  const freq = {};
+  allItems.forEach(item => {
+    const name = item.item_name || item.name;
+    if (name) freq[name] = (freq[name] || 0) + (item.quantity || 1);
+  });
+
+  // Top 5 items
+  const top5 = Object.entries(freq)
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 5);
+
+  const topEl = document.getElementById('tasteTopItems');
+  if (!top5.length) {
+    topEl.innerHTML = '<div style="color:var(--muted);font-size:.83rem;">Place orders to build your taste profile!</div>';
+  } else {
+    const maxCount = top5[0][1];
+    topEl.innerHTML = top5.map(([name, count], i) => {
+      const menuItem = menuData.find(m => m.name === name);
+      const emoji    = menuItem ? menuItem.emoji : '🍱';
+      const pct      = Math.round((count / maxCount) * 100);
+      return `
+        <div class="taste-item-row">
+          <div class="taste-rank">#${i+1}</div>
+          <div style="font-size:1.1rem">${emoji}</div>
+          <div class="taste-item-info" style="flex:1">
+            <div class="taste-item-name">${name}</div>
+            <div class="taste-bar"><div class="taste-bar-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="taste-item-count">×${count}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // Generate taste tags from order data
+  const tagEl = document.getElementById('tasteTags');
+  const tags  = [];
+  const spicyCount = allItems.filter(i => {
+    const m = menuData.find(m => (m.name === (i.item_name||i.name)));
+    return m && m.hot;
+  }).length;
+  const vegCount = allItems.filter(i => {
+    const m = menuData.find(m => (m.name === (i.item_name||i.name)));
+    return m && m.veg;
+  }).length;
+  const sweetCount = allItems.filter(i => (i.vendor_name||'').includes('Sweet')).length;
+  const asianCount = allItems.filter(i => (i.vendor_name||'').includes('Wok')).length;
+  const indianCount = allItems.filter(i => (i.vendor_name||'').includes('Spice')).length;
+
+  if (spicyCount > 2)  tags.push({label:'🌶 Spicy Lover',  cls:'tt-spicy'});
+  if (vegCount > allItems.length * 0.6) tags.push({label:'🥦 Veg Foodie', cls:'tt-veg'});
+  if (sweetCount > 1)  tags.push({label:'🍰 Sweet Tooth',  cls:'tt-sweet'});
+  if (asianCount > 1)  tags.push({label:'🥢 Asian Cuisine', cls:'tt-asian'});
+  if (indianCount > 1) tags.push({label:'🍛 Indian Cuisine',cls:'tt-indian'});
+  if (!tags.length)    tags.push({label:'🍽 Explorer',       cls:'tt-indian'});
+
+  tagEl.innerHTML = tags.map(t => `<span class="taste-tag ${t.cls}">${t.label}</span>`).join('');
+}
+
+function renderRecentOrders() {
+  const el = document.getElementById('recentOrdersList');
+  const recent = myOrders.slice(0, 5);
+  if (!recent.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.83rem;">No orders yet.</div>';
+    return;
+  }
+  const sm = {placed:'os-placed',confirmed:'os-placed',preparing:'os-preparing',ready:'os-preparing',collected:'os-collected',cancelled:'os-cancelled'};
+  el.innerHTML = recent.map(o => {
+    const itemStr = (o.items||[]).slice(0,2).map(i=>i.item_name||i.name).join(', ') + (o.items?.length > 2 ? '…' : '');
+    return `
+      <div class="ro-item">
+        <div class="ro-token">#${o.token_number}</div>
+        <div class="ro-info">
+          <div class="ro-items-text">${itemStr || '—'}</div>
+          <div class="ro-date">${o.created_at || 'Today'} · <span class="oh-status ${sm[o.status]||'os-placed'}" style="font-size:.65rem;padding:.1rem .5rem;border-radius:99px">${(o.status||'placed').toUpperCase()}</span></div>
+        </div>
+        <div class="ro-total">₹${o.total}</div>
+        <button class="ro-reorder" onclick="quickReorder(${o.order_id||0})">↩ Again</button>
+      </div>`;
+  }).join('');
+}
+
+function togglePref(key, btn) {
+  const current = Prefs.val(key, key === 'spicy' || key === 'rec');
+  const newVal  = !current;
+  Prefs.set(key, newVal);
+  btn.className = 'toggle ' + (newVal ? 'on' : 'off');
+  // Apply immediately
+  if (key === 'veg' || key === 'budget') renderMenu();
+  if (key === 'rec') {
+    const bar = document.getElementById('aiRecBar');
+    if (!newVal) bar.classList.remove('show');
+    else buildRecommendations();
+  }
+  showToast('Preference saved ✓');
+}
+
+function quickReorder(orderId) {
+  const order = myOrders.find(o => o.order_id === orderId);
+  if (!order || !order.items) { showToast('Cannot reorder this item', 'warn'); return; }
+  order.items.forEach(oi => {
+    const item = menuData.find(m => m.name === (oi.item_name || oi.name));
+    if (item) {
+      const ex = cart.find(c => c.id === item.id);
+      if (ex) ex.qty += (oi.quantity || 1);
+      else cart.push({ ...item, qty: oi.quantity || 1 });
+    }
+  });
+  renderCart();
+  showToast('Items added to cart! 🛒');
+  showPage('menu');
+}
+
+// ══════════════════════════════
 //  CART
-// ════════════════════════
+// ══════════════════════════════
 function addToCart(id) {
   const item = menuData.find(m => m.id === id);
   if (!item) return;
@@ -476,7 +1035,6 @@ function changeQty(i, delta) {
 function renderCart() {
   const el = document.getElementById('cartItems');
   if (!el) return;
-
   if (!cart.length) {
     el.innerHTML = '<div class="empty-cart"><div style="font-size:2.8rem;margin-bottom:.75rem">🛒</div><p style="color:var(--muted)">Your tray is empty.<br>Add items from the menu!</p></div>';
     document.getElementById('cartCount').textContent = '0';
@@ -487,7 +1045,6 @@ function renderCart() {
     document.getElementById('discHint').textContent  = '';
     return;
   }
-
   el.innerHTML = cart.map((item, i) => `
     <div class="c-item">
       <div class="c-emoji">${item.emoji}</div>
@@ -502,13 +1059,11 @@ function renderCart() {
         <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
       </div>
     </div>`).join('');
-
   const sub   = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const tax   = Math.round(sub * 0.05);
   const disc  = sub >= 400 ? Math.round(sub * 0.10) : 0;
   const total = sub + tax - disc;
   const count = cart.reduce((s, i) => s + i.qty, 0);
-
   document.getElementById('cartCount').textContent = count;
   document.getElementById('subtotal').textContent  = '₹' + sub;
   document.getElementById('taxAmt').textContent    = '₹' + tax;
@@ -524,39 +1079,46 @@ function toggleCart() {
   document.getElementById('cartOverlay').classList.toggle('open');
 }
 
-// ════════════════════════
+// ══════════════════════════════
 //  PLACE ORDER
-// ════════════════════════
+// ══════════════════════════════
 async function placeOrder() {
   if (!cart.length) { showToast('Your cart is empty', 'error'); return; }
-
-  const token = Math.floor(Math.random() * 100) + 50; // demo fallback
+  const token = Math.floor(Math.random() * 100) + 50;
   let finalToken = token;
+  let orderObj = null;
 
   try {
     if (typeof OrdersAPI !== 'undefined') {
       const items = cart.map(c => ({ item_id: c.id, quantity: c.qty }));
       const data  = await OrdersAPI.place(items);
       finalToken  = data.token_number;
-      myOrders.unshift({
+      orderObj = {
         order_id: data.order?.order_id || Date.now(),
         token_number: finalToken,
         status: 'placed',
+        discount: data.order?.discount || 0,
         total: data.order?.total || cart.reduce((s,i)=>s+i.price*i.qty,0),
-        items: data.order?.items || cart.map(c=>({item_name:c.name,quantity:c.qty})),
+        items: data.order?.items || cart.map(c=>({item_name:c.name,quantity:c.qty,vendor_name:c.vendor})),
         created_at: new Date().toLocaleTimeString()
-      });
+      };
+      myOrders.unshift(orderObj);
     }
   } catch(e) {
-    myOrders.unshift({
+    orderObj = {
       order_id: Date.now(),
       token_number: finalToken,
       status: 'preparing',
+      discount: 0,
       total: cart.reduce((s,i)=>s+i.price*i.qty,0),
-      items: cart.map(c=>({item_name:c.name,quantity:c.qty})),
+      items: cart.map(c=>({item_name:c.name,quantity:c.qty,vendor_name:c.vendor})),
       created_at: new Date().toLocaleTimeString()
-    });
+    };
+    myOrders.unshift(orderObj);
   }
+
+  // Save to order history for taste DNA
+  if (orderObj) OrderHistory.add(orderObj);
 
   currentToken = finalToken;
   cart = [];
@@ -568,15 +1130,18 @@ async function placeOrder() {
   tb.classList.add('has-token');
   setTimeout(() => document.getElementById('tokenModal').classList.add('open'), 300);
   showToast('Order placed! Token #' + finalToken + ' 🎉');
+
+  // Start queue polling
+  startQueuePolling();
 }
 
 function closeModal() {
   document.getElementById('tokenModal').classList.remove('open');
 }
 
-// ════════════════════════
+// ══════════════════════════════
 //  TRACK
-// ════════════════════════
+// ══════════════════════════════
 function renderTrackPage() {
   if (currentToken) {
     document.getElementById('trackTokenInput').value = currentToken;
@@ -585,14 +1150,13 @@ function renderTrackPage() {
 }
 
 async function searchOrder() {
-  const inp = document.getElementById('trackTokenInput');
+  const inp   = document.getElementById('trackTokenInput');
   const token = parseInt(inp.value);
   if (!token) { showToast('Enter a valid token number', 'error'); return; }
   try {
     if (typeof OrdersAPI !== 'undefined') {
       const data = await OrdersAPI.byToken(token);
-      buildTrackCardFromData(data.order);
-      return;
+      buildTrackCardFromData(data.order); return;
     }
   } catch(e) {}
   buildTrackCard(token, 'preparing');
@@ -604,32 +1168,17 @@ function buildTrackCard(token, status) {
   const icons  = ['📝','✅','⚡','🍽','🎉'];
   const idx    = Math.max(0, steps.indexOf(status));
   const estMap = {placed:'~12 min',confirmed:'~10 min',preparing:'~8 min',ready:'Ready Now!',collected:'Done ✓'};
-
   document.getElementById('trackResult').innerHTML = `
     <div class="track-card">
       <div class="track-top">
-        <div>
-          <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Token</div>
-          <div class="track-token-big">#${token}</div>
-        </div>
-        <div style="text-align:right">
-          <div class="track-est-label">Est. Ready</div>
-          <div class="track-est-val">${estMap[status] || '~8 min'}</div>
-        </div>
+        <div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Token</div>
+        <div class="track-token-big">#${token}</div></div>
+        <div style="text-align:right"><div class="track-est-label">Est. Ready</div><div class="track-est-val">${estMap[status]||'~8 min'}</div></div>
       </div>
       <div class="tsteps">
-        ${steps.map((s,i) => `
-          <div class="tstep">
-            <div class="tdot ${i < idx ? 'done' : i === idx ? 'current' : ''}">${i < idx ? '✓' : icons[i]}</div>
-            <div class="tlbl">${labels[i]}</div>
-          </div>
-          ${i < steps.length-1 ? `<div class="tline ${i < idx ? 'done' : ''}"></div>` : ''}`
-        ).join('')}
-      </div>
-      <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">Items</div>
-      <div class="track-items">
-        <div class="titem-row"><div class="titem-emoji">🍛</div><div class="titem-info"><div class="titem-name">Butter Chicken × 1</div><div class="titem-vendor">Spice Garden</div></div><span class="titem-status ts-preparing">Preparing</span></div>
-        <div class="titem-row"><div class="titem-emoji">🍔</div><div class="titem-info"><div class="titem-name">Classic Burger × 2</div><div class="titem-vendor">Burger Barn</div></div><span class="titem-status ts-ready">Ready</span></div>
+        ${steps.map((s,i)=>`
+          <div class="tstep"><div class="tdot ${i<idx?'done':i===idx?'current':''}">${i<idx?'✓':icons[i]}</div><div class="tlbl">${labels[i]}</div></div>
+          ${i<steps.length-1?`<div class="tline ${i<idx?'done':''}"></div>`:''}`).join('')}
       </div>
     </div>`;
 }
@@ -640,28 +1189,32 @@ function buildTrackCardFromData(order) {
   const icons  = ['📝','✅','⚡','🍽','🎉'];
   const idx    = Math.max(0, steps.indexOf(order.status));
   const tsMap  = {pending:'ts-pending',preparing:'ts-preparing',ready:'ts-ready',done:'ts-done'};
-
   document.getElementById('trackResult').innerHTML = `
     <div class="track-card">
       <div class="track-top">
-        <div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Token</div><div class="track-token-big">#${order.token_number}</div></div>
+        <div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem">Token</div>
+        <div class="track-token-big">#${order.token_number}</div></div>
         <div style="text-align:right"><div class="track-est-label">Status</div><div class="track-est-val" style="font-size:1.4rem">${order.status.toUpperCase()}</div></div>
       </div>
       <div class="tsteps">
-        ${steps.map((s,i) => `
+        ${steps.map((s,i)=>`
           <div class="tstep"><div class="tdot ${i<idx?'done':i===idx?'current':''}">${i<idx?'✓':icons[i]}</div><div class="tlbl">${labels[i]}</div></div>
-          ${i<steps.length-1?`<div class="tline ${i<idx?'done':''}"></div>`:''}`
-        ).join('')}
+          ${i<steps.length-1?`<div class="tline ${i<idx?'done':''}"></div>`:''}`).join('')}
       </div>
       <div class="track-items">
-        ${order.items.map(it=>`<div class="titem-row"><div class="titem-emoji">${it.emoji||'🍱'}</div><div class="titem-info"><div class="titem-name">${it.item_name} × ${it.quantity}</div><div class="titem-vendor">${it.vendor_name||''}</div></div><span class="titem-status ${tsMap[it.item_status]||'ts-pending'}">${it.item_status}</span></div>`).join('')}
+        ${(order.items||[]).map(it=>`
+          <div class="titem-row">
+            <div class="titem-emoji">${it.emoji||'🍱'}</div>
+            <div class="titem-info"><div class="titem-name">${it.item_name} × ${it.quantity}</div><div class="titem-vendor">${it.vendor_name||''}</div></div>
+            <span class="titem-status ${tsMap[it.item_status]||'ts-pending'}">${it.item_status}</span>
+          </div>`).join('')}
       </div>
     </div>`;
 }
 
-// ════════════════════════
+// ══════════════════════════════
 //  MY ORDERS
-// ════════════════════════
+// ══════════════════════════════
 async function renderMyOrders() {
   try {
     if (typeof OrdersAPI !== 'undefined') {
@@ -669,7 +1222,6 @@ async function renderMyOrders() {
       if (data.orders?.length) myOrders = data.orders;
     }
   } catch(e) {}
-
   const el = document.getElementById('myOrdersList');
   if (!myOrders.length) {
     el.innerHTML = '<div class="no-order"><div style="font-size:2.5rem;margin-bottom:.75rem">📋</div><p>No orders yet. Go to Menu to place your first order!</p></div>';
@@ -680,53 +1232,21 @@ async function renderMyOrders() {
     <div class="ohcard">
       <div class="oh-top">
         <div class="oh-token">#${o.token_number}</div>
-        <div class="oh-date">${o.created_at || 'Today'}</div>
+        <div class="oh-date">${o.created_at||'Today'}</div>
         <div class="oh-total">₹${o.total}</div>
-        <span class="oh-status ${sm[o.status] || 'os-placed'}">${(o.status||'placed').toUpperCase()}</span>
+        <span class="oh-status ${sm[o.status]||'os-placed'}">${(o.status||'placed').toUpperCase()}</span>
       </div>
       <div class="oh-items">${(o.items||[]).map(i=>`${i.item_name||i.name} × ${i.quantity||i.qty}`).join(' · ')||'—'}</div>
       <div class="oh-actions">
         <button class="oh-btn btn-trk" onclick="document.getElementById('trackTokenInput').value=${o.token_number};showPage('track')">📍 Track</button>
-        <button class="oh-btn btn-ro" onclick="reorder(${o.order_id||0})">🔄 Reorder</button>
+        <button class="oh-btn btn-ro" onclick="quickReorder(${o.order_id||0})">🔄 Reorder</button>
       </div>
     </div>`).join('');
-
-  // Update account stats
-  const total = myOrders.reduce((s,o)=>s+parseFloat(o.total||0),0);
-  setEl('statOrders', myOrders.length);
-  setEl('statSpent',  '₹'+Math.round(total));
-  setEl('statSaved',  '₹'+Math.round(total*0.05));
 }
 
-function reorder(id) {
-  showToast('Items added back to cart! 🛒');
-  showPage('menu');
-}
-
-// ════════════════════════
-//  ACCOUNT
-// ════════════════════════
-function renderAccount() {
-  try {
-    const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
-    if (!user) return;
-    const initials = (user.name||'?').split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
-    setEl('acctInitials', initials);
-    setEl('acctName',     user.name);
-    setEl('acctEmail',    user.email);
-    setEl('editEmail',    user.email);
-    const en = document.getElementById('editName');
-    const ep = document.getElementById('editPhone');
-    if (en) en.value = user.name || '';
-    if (ep) ep.value = user.phone || '';
-  } catch(e) {}
-}
-
-function saveProfile() { showToast('Profile saved! ✓'); }
-
-// ════════════════════════
+// ══════════════════════════════
 //  HELPERS
-// ════════════════════════
+// ══════════════════════════════
 function setEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
@@ -735,22 +1255,24 @@ function setEl(id, val) {
 function showToast(msg, type='success') {
   const el = document.createElement('div');
   const bg = type==='error'?'#e74c3c':type==='warn'?'#f39c12':'#4caf7d';
-  el.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;padding:.75rem 1.5rem;border-radius:10px;font-family:sans-serif;font-size:.88rem;font-weight:600;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3);background:${bg};`;
+  el.style.cssText = `position:fixed;bottom:24px;right:24px;z-index:9999;padding:.75rem 1.5rem;border-radius:10px;font-family:sans-serif;font-size:.88rem;font-weight:600;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.3);background:${bg};animation:fadeIn .3s ease;`;
   el.textContent = msg;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 3000);
 }
 
+function saveProfile() { showToast('Profile saved! ✓'); }
+
 function doLogout() {
+  if (queueInterval) clearInterval(queueInterval);
   try { if (typeof Auth !== 'undefined') Auth.clear(); } catch(e) {}
   window.location.href = '/login';
 }
 
-// ════════════════════════
+// ══════════════════════════════
 //  INIT
-// ════════════════════════
+// ══════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
-  // Auth check — skip if Auth not available (demo mode)
   try {
     if (typeof Auth === 'undefined' || !Auth.isLoggedIn()) {
       window.location.href = '/login'; return;
@@ -759,13 +1281,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!u) { Auth.clear(); window.location.href = '/login'; return; }
   } catch(e) {}
 
-  // Show loading state immediately
   renderMenu();
   renderCart();
 
-  // Load real data in background (fail silently)
   (async function loadData() {
-    // ── Load vendors dynamically and build tabs ──────────────
+    // ── Build vendor tabs dynamically ──────────────────────────
     try {
       if (typeof MenuAPI !== 'undefined') {
         const vdata = await MenuAPI.getVendors();
@@ -776,7 +1296,7 @@ document.addEventListener('DOMContentLoaded', function() {
             vdata.vendors.forEach(function(v) {
               const tab = document.createElement('div');
               tab.className = 'vtab';
-              tab.innerHTML = '<span class="dot"></span>' + (v.emoji || '🍽') + ' ' + v.name;
+              tab.innerHTML = '<span class="dot"></span>' + (v.emoji||'🍽') + ' ' + v.name;
               tab.dataset.vendor = v.name;
               tab.onclick = function() { filterVendor(this.dataset.vendor, this); };
               tabsEl.appendChild(tab);
@@ -786,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     } catch(e) {}
 
-    // ── Load all menu items from DB (replaces hardcoded data) ─
+    // ── Load full menu from DB ─────────────────────────────────
     try {
       if (typeof MenuAPI !== 'undefined') {
         const data = await MenuAPI.getItems();
@@ -796,11 +1316,12 @@ document.addEventListener('DOMContentLoaded', function() {
             menuData.push({id:i.item_id,name:i.name,vendor:i.vendor_name,price:i.price,emoji:i.emoji||'🍱',desc:i.description||'',veg:!!i.is_veg,hot:!!i.is_spicy});
           });
           renderMenu();
+          buildRecommendations();
         }
       }
     } catch(e) {}
 
-    // Load active order for token badge
+    // ── Load orders for token badge + profile ──────────────────
     try {
       if (typeof OrdersAPI !== 'undefined') {
         const data = await OrdersAPI.myOrders();
@@ -810,12 +1331,9 @@ document.addEventListener('DOMContentLoaded', function() {
           if (active) {
             currentToken = active.token_number;
             const tb = document.getElementById('tokenBadge');
-            if (tb) { tb.textContent='🎫 Token #'+currentToken; tb.classList.add('has-token'); }
+            if (tb) { tb.textContent = '🎫 Token #' + currentToken; tb.classList.add('has-token'); }
+            startQueuePolling();
           }
-          const total = myOrders.reduce((s,o)=>s+parseFloat(o.total||0),0);
-          setEl('statOrders', myOrders.length);
-          setEl('statSpent',  '₹'+Math.round(total));
-          setEl('statSaved',  '₹'+Math.round(total*0.05));
         }
       }
     } catch(e) {}
