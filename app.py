@@ -138,9 +138,9 @@ def create_app():
 
     return app
 
+app = create_app()
 
 if __name__ == '__main__':
-    app = create_app()
     port = int(os.getenv('PORT', 5000))
     print(f"\n Serving from: {BASE_DIR}")
     print(f" Open: http://localhost:{port}\n")
