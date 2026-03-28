@@ -4,7 +4,7 @@
  * Base URL points to Flask running on localhost:5000
  */
 
-const API_BASE = 'https://food-court-management-production.up.railway.app/api';
+const API_BASE = '/api';
 
 // ── Token Storage ────────────────────────────────────────
 const Auth = {
