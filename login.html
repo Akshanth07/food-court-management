@@ -4,116 +4,342 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FoodCourt — Login</title>
-<!-- Load api.js FIRST -->
+<meta name="description" content="Smart Food Court Management System — Login to order, manage, or oversee your food court.">
 <script src="/static/js/api.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0d0d0d;--surface:#161616;--card:#1e1e1e;--border:#2a2a2a;--accent:#f5a623;--text:#f0ede8;--muted:#7a7570;--green:#4caf7d;--red:#e8572a;}
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;}
-  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(245,166,35,.12),transparent 65%);pointer-events:none;}
+  :root {
+    --bg: #0a0a0c;
+    --surface: #141418;
+    --card: #1c1c22;
+    --border: #2a2a32;
+    --accent: #f5a623;
+    --accent-glow: rgba(245, 166, 35, .15);
+    --accent-hover: #ffc44d;
+    --text: #f0ede8;
+    --muted: #7a7570;
+    --green: #4caf7d;
+    --red: #e8572a;
+  }
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem;width:100%;max-width:420px;position:relative;z-index:1;}
-  .logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--accent);text-align:center;margin-bottom:.25rem;}
-  .sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:2rem;}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:2rem;}
-  .tab{flex:1;padding:.6rem;text-align:center;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--muted);transition:all .2s;user-select:none;}
-  .tab.active{background:var(--accent);color:#000;}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    overflow: hidden;
+  }
 
-  .form-group{margin-bottom:1.25rem;}
-  label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.08em;}
-  input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;}
-  input:focus{border-color:var(--accent);}
+  /* Animated background blobs */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: .5;
+    animation: float 12s ease-in-out infinite alternate;
+  }
+  body::before {
+    width: 500px; height: 500px;
+    top: -15%; left: -10%;
+    background: radial-gradient(circle, rgba(245,166,35,.2), transparent 70%);
+  }
+  body::after {
+    width: 400px; height: 400px;
+    bottom: -15%; right: -10%;
+    background: radial-gradient(circle, rgba(245,120,35,.12), transparent 70%);
+    animation-delay: -6s;
+  }
 
-  .btn{width:100%;background:var(--accent);border:none;color:#000;padding:1rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:.5rem;}
-  .btn:hover{background:#ffc04d;}
-  .btn:disabled{opacity:.6;cursor:not-allowed;}
+  @keyframes float {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, -30px) scale(1.15); }
+  }
 
-  .error-msg{background:rgba(232,87,42,.1);border:1px solid rgba(232,87,42,.3);color:var(--red);border-radius:8px;padding:.65rem 1rem;font-size:.84rem;margin-bottom:1rem;display:none;}
-  .error-msg.show{display:block;}
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 2.75rem 2.5rem 2.5rem;
+    width: 100%;
+    max-width: 430px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 24px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.03) inset;
+    backdrop-filter: blur(20px);
+    animation: cardIn .6s ease-out;
+  }
 
-  .success-msg{background:rgba(76,175,77,.1);border:1px solid rgba(76,175,77,.3);color:var(--green);border-radius:8px;padding:.65rem 1rem;font-size:.84rem;margin-bottom:1rem;display:none;}
-  .success-msg.show{display:block;}
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(24px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
 
-  /* Demo credentials box — plain text, no links */
-  .demo-box{margin-top:1.75rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;}
-  .demo-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.75rem;}
-  .demo-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);}
-  .demo-row:last-child{border-bottom:none;}
-  .demo-role{font-size:.75rem;color:var(--muted);min-width:60px;}
-  .demo-email{font-size:.78rem;color:var(--accent);font-weight:600;cursor:pointer;transition:opacity .2s;}
-  .demo-email:hover{opacity:.7;}
-  .demo-pass{font-size:.75rem;color:var(--muted);}
-  .demo-hint{font-size:.7rem;color:var(--muted);margin-top:.6rem;text-align:center;}
+  /* Branding */
+  .brand {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .brand-icon {
+    font-size: 2.5rem;
+    margin-bottom: .5rem;
+    display: block;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.08); }
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent) 0%, #ffcc66 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -.02em;
+  }
+  .brand-tagline {
+    color: var(--muted);
+    font-size: .82rem;
+    margin-top: .35rem;
+    letter-spacing: .04em;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 1.75rem;
+    position: relative;
+  }
+  .tab {
+    flex: 1;
+    padding: .65rem;
+    text-align: center;
+    border-radius: 11px;
+    cursor: pointer;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all .25s ease;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 4px 16px rgba(245, 166, 35, .25);
+  }
+  .tab:not(.active):hover {
+    color: var(--text);
+  }
+
+  /* Form */
+  .form-group { margin-bottom: 1.25rem; }
+  label {
+    display: block;
+    font-size: .75rem;
+    color: var(--muted);
+    margin-bottom: .45rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-weight: 500;
+  }
+  .input-wrap {
+    position: relative;
+  }
+  input {
+    width: 100%;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    outline: none;
+    transition: border-color .25s, box-shadow .25s;
+  }
+  input::placeholder { color: rgba(122, 117, 112, .6); }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  /* Password toggle */
+  .pw-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 4px;
+    transition: color .2s;
+    line-height: 1;
+  }
+  .pw-toggle:hover { color: var(--text); }
+
+  /* Button */
+  .btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), #e69500);
+    border: none;
+    color: #000;
+    padding: 1rem;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .25s;
+    margin-top: .75rem;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: .02em;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+    transition: left .5s;
+  }
+  .btn:hover { 
+    background: linear-gradient(135deg, var(--accent-hover), #f5a623);
+    box-shadow: 0 8px 24px rgba(245, 166, 35, .3);
+    transform: translateY(-1px);
+  }
+  .btn:hover::before { left: 100%; }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Messages */
+  .error-msg {
+    background: rgba(232,87,42,.08);
+    border: 1px solid rgba(232,87,42,.25);
+    color: var(--red);
+    border-radius: 10px;
+    padding: .7rem 1rem;
+    font-size: .84rem;
+    margin-bottom: 1rem;
+    display: none;
+    animation: msgIn .25s ease-out;
+  }
+  .success-msg {
+    background: rgba(76,175,77,.08);
+    border: 1px solid rgba(76,175,77,.25);
+    color: var(--green);
+    border-radius: 10px;
+    padding: .7rem 1rem;
+    font-size: .84rem;
+    margin-bottom: 1rem;
+    display: none;
+    animation: msgIn .25s ease-out;
+  }
+  .error-msg.show, .success-msg.show { display: flex; align-items: center; gap: .5rem; }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-text {
+    font-size: .75rem;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+  .footer-text span { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .card { padding: 2rem 1.5rem 1.75rem; border-radius: 22px; }
+    .brand-name { font-size: 1.6rem; }
+  }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo">🍽 FoodCourt</div>
-  <div class="sub">Smart Food Court Management</div>
-
-  <div class="tabs">
-    <div class="tab active" id="loginTab"    onclick="switchTab('login')">Login</div>
-    <div class="tab"        id="registerTab" onclick="switchTab('register')">Register</div>
+  <div class="brand">
+    <span class="brand-icon">🍽</span>
+    <div class="brand-name">FoodCourt</div>
+    <div class="brand-tagline">Smart Food Court Management</div>
   </div>
 
-  <div class="error-msg"   id="errorMsg"></div>
-  <div class="success-msg" id="successMsg"></div>
+  <div class="tabs">
+    <div class="tab active" id="loginTab" onclick="switchTab('login')">Sign In</div>
+    <div class="tab" id="registerTab" onclick="switchTab('register')">Sign Up</div>
+  </div>
+
+  <div class="error-msg" id="errorMsg"><span>⚠</span> <span id="errorText"></span></div>
+  <div class="success-msg" id="successMsg"><span>✓</span> <span id="successText"></span></div>
 
   <!-- LOGIN FORM -->
   <div id="loginForm">
     <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()">
+      <label for="loginEmail">Email Address</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <label for="loginPassword">Password</label>
+      <div class="input-wrap">
+        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button type="button" class="pw-toggle" onclick="togglePw('loginPassword', this)" aria-label="Toggle password visibility">👁</button>
+      </div>
     </div>
-    <button class="btn" id="loginBtn" onclick="doLogin()">Login</button>
+    <button class="btn" id="loginBtn" onclick="doLogin()">Sign In</button>
   </div>
 
   <!-- REGISTER FORM -->
   <div id="registerForm" style="display:none">
     <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" id="regName" placeholder="Your full name">
+      <label for="regName">Full Name</label>
+      <input type="text" id="regName" placeholder="Your full name" autocomplete="name">
     </div>
     <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="regEmail" placeholder="you@example.com">
+      <label for="regEmail">Email Address</label>
+      <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email">
     </div>
     <div class="form-group">
-      <label>Phone <span style="color:var(--muted);font-size:.7rem">(optional)</span></label>
-      <input type="tel" id="regPhone" placeholder="9XXXXXXXXX">
+      <label for="regPhone">Phone <span style="color:var(--muted);font-size:.7rem;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <input type="tel" id="regPhone" placeholder="9XXXXXXXXX" autocomplete="tel">
     </div>
     <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="regPassword" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doRegister()">
+      <label for="regPassword">Password</label>
+      <div class="input-wrap">
+        <input type="password" id="regPassword" placeholder="Min 6 characters" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+        <button type="button" class="pw-toggle" onclick="togglePw('regPassword', this)" aria-label="Toggle password visibility">👁</button>
+      </div>
     </div>
     <button class="btn" id="registerBtn" onclick="doRegister()">Create Account</button>
   </div>
 
-  <!-- DEMO CREDENTIALS — plain text, no email links -->
-  <div class="demo-box">
-    <div class="demo-title">Demo Accounts — click email to fill</div>
-    <div class="demo-row">
-      <span class="demo-role">Admin</span>
-      <span class="demo-email" onclick="fillLogin('admin@foodcourt.com','password123')">admin@foodcourt.com</span>
-      <span class="demo-pass">password123</span>
-    </div>
-    <div class="demo-row">
-      <span class="demo-role">Vendor</span>
-      <span class="demo-email" onclick="fillLogin('ravi@spicegarden.com','password123')">ravi@spicegarden.com</span>
-      <span class="demo-pass">password123</span>
-    </div>
-    <div class="demo-row">
-      <span class="demo-role">Customer</span>
-      <span class="demo-email" onclick="fillLogin('customer@test.com','password123')">customer@test.com</span>
-      <span class="demo-pass">password123</span>
-    </div>
-    <div class="demo-hint">👆 Click any email above to auto-fill the form</div>
+  <div class="footer">
+    <div class="footer-text">Powered by <span>FoodCourt</span> Management System</div>
   </div>
 </div>
 
@@ -127,17 +353,29 @@ function switchTab(tab) {
   hideMessages();
 }
 
+// ── Password toggle ──────────────────────────────────────
+function togglePw(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🔒';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
 // ── Messages ──────────────────────────────────────────────
 function showError(msg) {
   const el = document.getElementById('errorMsg');
-  el.textContent = msg;
+  document.getElementById('errorText').textContent = msg;
   el.classList.add('show');
   document.getElementById('successMsg').classList.remove('show');
 }
 
 function showSuccess(msg) {
   const el = document.getElementById('successMsg');
-  el.textContent = msg;
+  document.getElementById('successText').textContent = msg;
   el.classList.add('show');
   document.getElementById('errorMsg').classList.remove('show');
 }
@@ -145,14 +383,6 @@ function showSuccess(msg) {
 function hideMessages() {
   document.getElementById('errorMsg').classList.remove('show');
   document.getElementById('successMsg').classList.remove('show');
-}
-
-// ── Fill login from demo click ────────────────────────────
-function fillLogin(email, pass) {
-  switchTab('login');
-  document.getElementById('loginEmail').value    = email;
-  document.getElementById('loginPassword').value = pass;
-  document.getElementById('loginEmail').focus();
 }
 
 // ── LOGIN ─────────────────────────────────────────────────
@@ -166,7 +396,7 @@ async function doLogin() {
 
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
-  btn.textContent = 'Logging in…';
+  btn.textContent = 'Signing in…';
 
   try {
     const data = await AuthAPI.login(email, password);
@@ -180,7 +410,7 @@ async function doLogin() {
   } catch (err) {
     showError(err.message || 'Login failed. Check your email and password.');
     btn.disabled    = false;
-    btn.textContent = 'Login';
+    btn.textContent = 'Sign In';
   }
 }
 
@@ -192,7 +422,6 @@ async function doRegister() {
   const phone    = document.getElementById('regPhone').value.trim();
   const password = document.getElementById('regPassword').value;
 
-  // Validate
   if (!name)               return showError('Please enter your full name');
   if (!email)              return showError('Please enter your email address');
   if (!email.includes('@'))return showError('Please enter a valid email address');
@@ -210,7 +439,6 @@ async function doRegister() {
       window.location.href = '/customer';
     }, 800);
   } catch (err) {
-    // Show the exact error from the server
     const msg = err.message || 'Registration failed. Please try again.';
     showError(msg);
     btn.disabled    = false;
