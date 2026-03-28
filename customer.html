@@ -239,12 +239,8 @@
 
   <div class="menu-section">
     <div class="section-label">Vendors</div>
-    <div class="vendor-tabs">
-      <div class="vtab active" id="vt-all"       onclick="filterVendor('all',this)"><span class="dot"></span>All</div>
-      <div class="vtab"        id="vt-sg"         onclick="filterVendor('Spice Garden',this)"><span class="dot"></span>🌶 Spice Garden</div>
-      <div class="vtab"        id="vt-bb"         onclick="filterVendor('Burger Barn',this)"><span class="dot"></span>🍔 Burger Barn</div>
-      <div class="vtab"        id="vt-wr"         onclick="filterVendor('Wok & Roll',this)"><span class="dot"></span>🥢 Wok & Roll</div>
-      <div class="vtab"        id="vt-sh"         onclick="filterVendor('Slice Heaven',this)"><span class="dot"></span>🍕 Slice Heaven</div>
+    <div class="vendor-tabs" id="vendorTabs">
+      <div class="vtab active" id="vt-all" onclick="filterVendor('all',this)"><span class="dot"></span>All</div>
     </div>
 
     <div class="section-label">Filter</div>
@@ -363,27 +359,8 @@
 //  ALL APPLICATION LOGIC — runs after DOM is ready
 // ════════════════════════════════════════════════════
 
-// ── Menu Data ─────────────────────────────────────────────
-const menuData = [
-  {id:1, name:'Butter Chicken',    vendor:'Spice Garden', price:180, emoji:'🍛', desc:'Creamy tomato curry with tender chicken.', veg:false, hot:true},
-  {id:2, name:'Paneer Tikka',      vendor:'Spice Garden', price:140, emoji:'🧆', desc:'Grilled cottage cheese in smoky marinade.', veg:true,  hot:false},
-  {id:3, name:'Dal Makhani',       vendor:'Spice Garden', price:120, emoji:'🫕', desc:'Slow-cooked lentils in butter and cream.', veg:true,  hot:false},
-  {id:4, name:'Chicken Biryani',   vendor:'Spice Garden', price:200, emoji:'🍱', desc:'Fragrant basmati with spiced chicken.', veg:false, hot:true},
-  {id:5, name:'Palak Paneer',      vendor:'Spice Garden', price:130, emoji:'🥘', desc:'Spinach gravy with soft paneer.', veg:true,  hot:false},
-  {id:6, name:'Classic Burger',    vendor:'Burger Barn',  price:130, emoji:'🍔', desc:'Double patty with lettuce and house sauce.', veg:false, hot:false},
-  {id:7, name:'Crispy Fries',      vendor:'Burger Barn',  price:70,  emoji:'🍟', desc:'Golden shoestring fries with seasoning.', veg:true,  hot:false},
-  {id:8, name:'Veggie Wrap',       vendor:'Burger Barn',  price:110, emoji:'🌯', desc:'Grilled veggies with hummus in tortilla.', veg:true,  hot:false},
-  {id:9, name:'Cheese Burger',     vendor:'Burger Barn',  price:160, emoji:'🍔', desc:'Triple cheese smash burger.', veg:false, hot:false},
-  {id:10,name:'Milkshake',         vendor:'Burger Barn',  price:90,  emoji:'🥤', desc:'Thick vanilla or chocolate shake.', veg:true,  hot:false},
-  {id:11,name:'Hakka Noodles',     vendor:'Wok & Roll',   price:100, emoji:'🍜', desc:'Stir-fried noodles with soy and veggies.', veg:true,  hot:true},
-  {id:12,name:'Chilli Chicken',    vendor:'Wok & Roll',   price:160, emoji:'🍗', desc:'Crispy chicken in spicy Indo-Chinese sauce.', veg:false, hot:true},
-  {id:13,name:'Fried Rice',        vendor:'Wok & Roll',   price:90,  emoji:'🍚', desc:'Wok-tossed basmati with egg and veggies.', veg:false, hot:false},
-  {id:14,name:'Spring Rolls',      vendor:'Wok & Roll',   price:80,  emoji:'🥟', desc:'Crispy vegetable rolls with dipping sauce.', veg:true,  hot:false},
-  {id:15,name:'Margherita Pizza',  vendor:'Slice Heaven', price:200, emoji:'🍕', desc:'Classic thin crust with mozzarella.', veg:true,  hot:false},
-  {id:16,name:'BBQ Chicken Pizza', vendor:'Slice Heaven', price:250, emoji:'🍕', desc:'Smoky BBQ sauce with grilled chicken.', veg:false, hot:false},
-  {id:17,name:'Garlic Bread',      vendor:'Slice Heaven', price:80,  emoji:'🥖', desc:'Toasted sourdough with herb butter.', veg:true,  hot:false},
-  {id:18,name:'Pasta Arrabbiata',  vendor:'Slice Heaven', price:160, emoji:'🍝', desc:'Penne in spicy tomato sauce.', veg:true,  hot:true},
-];
+// ── Menu Data — loaded dynamically from API ────────────────
+const menuData = [];
 
 // ── State ─────────────────────────────────────────────────
 let cart         = [];
@@ -419,6 +396,13 @@ function showPage(name) {
 function renderMenu() {
   const grid = document.getElementById('menuGrid');
   if (!grid) return;
+
+  // Show loading if data not yet fetched
+  if (!menuData.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:.75rem">⏳</div><p>Loading menu…</p></div>';
+    return;
+  }
+
   const q = searchQ.toLowerCase();
   const filtered = menuData.filter(item => {
     const matchV = activeVendor === 'all' || item.vendor === activeVendor;
@@ -775,21 +759,41 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!u) { Auth.clear(); window.location.href = '/login'; return; }
   } catch(e) {}
 
-  // Render menu immediately with demo data
+  // Show loading state immediately
   renderMenu();
   renderCart();
 
   // Load real data in background (fail silently)
   (async function loadData() {
-    // Load real menu items
+    // ── Load vendors dynamically and build tabs ──────────────
+    try {
+      if (typeof MenuAPI !== 'undefined') {
+        const vdata = await MenuAPI.getVendors();
+        if (vdata.vendors && vdata.vendors.length) {
+          const tabsEl = document.getElementById('vendorTabs');
+          if (tabsEl) {
+            tabsEl.innerHTML = '<div class="vtab active" id="vt-all" onclick="filterVendor(\'all\',this)"><span class="dot"></span>All</div>';
+            vdata.vendors.forEach(function(v) {
+              const tab = document.createElement('div');
+              tab.className = 'vtab';
+              tab.innerHTML = '<span class="dot"></span>' + (v.emoji || '🍽') + ' ' + v.name;
+              tab.dataset.vendor = v.name;
+              tab.onclick = function() { filterVendor(this.dataset.vendor, this); };
+              tabsEl.appendChild(tab);
+            });
+          }
+        }
+      }
+    } catch(e) {}
+
+    // ── Load all menu items from DB (replaces hardcoded data) ─
     try {
       if (typeof MenuAPI !== 'undefined') {
         const data = await MenuAPI.getItems();
-        if (data.items?.length) {
-          data.items.forEach(i => {
-            if (!menuData.find(m=>m.id===i.item_id)) {
-              menuData.push({id:i.item_id,name:i.name,vendor:i.vendor_name,price:i.price,emoji:i.emoji||'🍱',desc:i.description||'',veg:!!i.is_veg,hot:!!i.is_spicy});
-            }
+        if (data.items && data.items.length) {
+          menuData.length = 0;
+          data.items.forEach(function(i) {
+            menuData.push({id:i.item_id,name:i.name,vendor:i.vendor_name,price:i.price,emoji:i.emoji||'🍱',desc:i.description||'',veg:!!i.is_veg,hot:!!i.is_spicy});
           });
           renderMenu();
         }
