@@ -1,18 +1,11 @@
-"""
-Flask extensions and SQLAlchemy models
-"""
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 
-db      = SQLAlchemy()
-jwt     = JWTManager()
-bcrypt  = Bcrypt()
-
-# ─────────────────────────────────────────────────────────
-# MODELS
-# ─────────────────────────────────────────────────────────
+db     = SQLAlchemy()
+jwt    = JWTManager()
+bcrypt = Bcrypt()
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -20,7 +13,7 @@ class User(db.Model):
     name       = db.Column(db.String(100), nullable=False)
     email      = db.Column(db.String(150), unique=True, nullable=False)
     password   = db.Column(db.String(255), nullable=False)
-    role       = db.Column(db.Enum('customer','vendor','admin'), default='customer')
+    role       = db.Column(db.String(20), default='customer')
     phone      = db.Column(db.String(15))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -72,8 +65,8 @@ class MenuItem(db.Model):
 
 class TokenSequence(db.Model):
     __tablename__ = 'token_sequence'
-    id          = db.Column(db.Integer, primary_key=True, default=1)
-    last_token  = db.Column(db.Integer, default=0)
+    id         = db.Column(db.Integer, primary_key=True, default=1)
+    last_token = db.Column(db.Integer, default=0)
 
 
 class Order(db.Model):
@@ -85,7 +78,7 @@ class Order(db.Model):
     tax          = db.Column(db.Numeric(8,2), default=0)
     discount     = db.Column(db.Numeric(8,2), default=0)
     total        = db.Column(db.Numeric(8,2), nullable=False)
-    status       = db.Column(db.Enum('placed','confirmed','preparing','ready','collected','cancelled'), default='placed')
+    status       = db.Column(db.String(20), default='placed')
     created_at   = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at   = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     items        = db.relationship('OrderItem', backref='order', lazy=True)
@@ -109,7 +102,7 @@ class OrderItem(db.Model):
     vendor_id     = db.Column(db.Integer, db.ForeignKey('vendors.vendor_id'), nullable=False)
     quantity      = db.Column(db.Integer, nullable=False, default=1)
     unit_price    = db.Column(db.Numeric(8,2), nullable=False)
-    item_status   = db.Column(db.Enum('pending','preparing','ready','collected'), default='pending')
+    item_status   = db.Column(db.String(20), default='pending')
     menu_item     = db.relationship('MenuItem')
     vendor        = db.relationship('Vendor')
 
