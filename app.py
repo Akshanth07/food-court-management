@@ -136,11 +136,77 @@ def create_app():
             db.session.rollback()
             return f'Error: {str(e)}', 500
 
+    @app.route('/add-sweetspot')
+    def add_sweetspot():
+        try:
+            from extensions import User, Vendor, MenuItem
+            if User.query.filter_by(email='sweet@sweetspot.com').first():
+                return 'Sweet Spot already exists! Login: sweet@sweetspot.com / password123', 200
+            pw = bcrypt.generate_password_hash('password123').decode('utf-8')
+            user = User(name='Sweet Spot', email='sweet@sweetspot.com', password=pw, role='vendor')
+            db.session.add(user)
+            db.session.flush()
+            vendor = Vendor(
+                user_id=user.user_id,
+                name='Sweet Spot',
+                emoji='🍰',
+                description='Desserts, sweets & frozen treats from around the world'
+            )
+            db.session.add(vendor)
+            db.session.flush()
+            items = [
+                # ── Indian Classics ──────────────────────────────────────
+                MenuItem(vendor_id=vendor.vendor_id, name='Gulab Jamun',         price=60,  emoji='🟤', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Rasgulla',            price=60,  emoji='⚪', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Gajar Halwa',         price=80,  emoji='🥕', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Kheer',               price=70,  emoji='🍚', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Jalebi',              price=50,  emoji='🌀', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Kaju Katli',          price=90,  emoji='💎', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Rasmalai',            price=80,  emoji='🍮', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Ladoo',               price=55,  emoji='🟡', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Malpua',              price=70,  emoji='🥞', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Shahi Tukda',         price=85,  emoji='🍞', is_available=True),
+                # ── Cakes & Bakes ────────────────────────────────────────
+                MenuItem(vendor_id=vendor.vendor_id, name='Chocolate Lava Cake', price=110, emoji='🍫', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='New York Cheesecake', price=120, emoji='🍰', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Red Velvet Cake',     price=100, emoji='❤️', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Tiramisu',            price=130, emoji='☕', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Brownie',             price=70,  emoji='🟫', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Pineapple Pastry',    price=80,  emoji='🍍', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Black Forest Cake',   price=100, emoji='🍒', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Blueberry Muffin',    price=60,  emoji='🫐', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Croissant',           price=55,  emoji='🥐', is_available=True),
+                # ── Ice Creams & Frozen ───────────────────────────────────
+                MenuItem(vendor_id=vendor.vendor_id, name='Vanilla Ice Cream',   price=70,  emoji='🍦', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Chocolate Ice Cream', price=70,  emoji='🍫', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Mango Ice Cream',     price=80,  emoji='🥭', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Butterscotch Sundae', price=90,  emoji='🍨', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Kulfi',               price=60,  emoji='🍡', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Falooda',             price=90,  emoji='🥤', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Waffle Ice Cream',    price=100, emoji='🧇', is_available=True),
+                # ── Mousse & Fine Desserts ────────────────────────────────
+                MenuItem(vendor_id=vendor.vendor_id, name='Chocolate Mousse',    price=90,  emoji='🍮', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Choco Fondue',        price=130, emoji='🍓', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Panna Cotta',         price=100, emoji='🍮', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Creme Brulee',        price=120, emoji='🔥', is_available=True),
+                # ── Waffles & Crepes ─────────────────────────────────────
+                MenuItem(vendor_id=vendor.vendor_id, name='Nutella Waffle',       price=110, emoji='🧇', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Strawberry Crepe',     price=90,  emoji='🍓', is_available=True),
+                MenuItem(vendor_id=vendor.vendor_id, name='Banana Nutella Crepe', price=95,  emoji='🍌', is_available=True),
+            ]
+            for m in items:
+                db.session.add(m)
+            db.session.commit()
+            return f'Sweet Spot added with {len(items)} desserts! Login: sweet@sweetspot.com / password123', 200
+        except Exception as e:
+            db.session.rollback()
+            return f'Error: {str(e)}', 500
+
     return app
 
-app = create_app()
 
 if __name__ == '__main__':
+    app = create_app()
     port = int(os.getenv('PORT', 5000))
     print(f"\n Serving from: {BASE_DIR}")
     print(f" Open: http://localhost:{port}\n")
