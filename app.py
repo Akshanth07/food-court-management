@@ -247,6 +247,23 @@ def create_app():
             db.session.rollback()
             return f'Error: {str(e)}', 500
 
+    # ── Fix Passwords ──────────────────────────────────────────
+    @app.route('/fix-passwords')
+    def fix_passwords():
+        try:
+            from extensions import User
+            users = User.query.all()
+            pw = bcrypt.generate_password_hash('password123').decode('utf-8')
+            count = 0
+            for u in users:
+                u.password = pw
+                count += 1
+            db.session.commit()
+            return f'Reset passwords for {count} users to password123', 200
+        except Exception as e:
+            db.session.rollback()
+            return f'Error: {str(e)}', 500
+
     return app
 
 app = create_app()
